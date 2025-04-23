@@ -14,40 +14,133 @@
         <!-- Estilos globales -->
         <style>
             :root {
-                --primary-color: #6200ee;
-                --primary-light: #9e47ff;
-                --primary-dark: #0400ba;
+                --primary-color: #4a6bff;
+                --primary-light: #6a8cff;
+                --primary-dark: #2a4bdf;
                 --secondary-color: #03dac6;
-                --background-dark: #121212;
-                --surface-dark: #1e1e1e;
-                --surface-light: #2c2c2c;
-                --text-primary: #e1e1e1;
-                --text-secondary: #a0a0a0;
+                --background-dark: #1e293b;
+                --surface-dark: #2c3e50;
+                --surface-light: #3a4b5d;
+                --text-primary: #ffffff;
+                --text-secondary: #cbd5e1;
             }
+            
             body {
                 font-family: 'Roboto', sans-serif;
                 background-color: var(--background-dark);
                 color: var(--text-primary);
-                padding-top: 20px;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
             }
+            
             .main-container {
-                max-width: 1200px;
+                flex: 1;
+                max-width: 1400px;
                 margin: 0 auto;
+                padding: 2rem 1rem;
+            }
+            
+            /* Barra de navegación */
+            .navbar {
+                background: linear-gradient(135deg, var(--primary-color), var(--primary-light)) !important;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                padding: 0.8rem 1rem;
+            }
+            
+            .navbar-brand {
+                font-weight: 500;
+                letter-spacing: 0.5px;
+                display: flex;
+                align-items: center;
+            }
+            
+            .navbar-brand i {
+                font-size: 1.2rem;
+            }
+            
+            .nav-link {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                padding: 0.5rem 1rem;
+                border-radius: 4px;
+                transition: all 0.3s;
+                font-weight: 400;
+            }
+            
+            .nav-link:hover, .nav-link.active {
+                background-color: rgba(255, 255, 255, 0.15);
+                transform: translateY(-1px);
+            }
+            
+            .nav-link i {
+                font-size: 1rem;
+            }
+            
+            /* Footer */
+            footer {
+                background: var(--surface-dark) !important;
+                color: var(--text-secondary);
+                padding: 1.5rem 0;
+                margin-top: auto;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            footer p {
+                margin: 0;
+                font-size: 0.9rem;
+            }
+            
+            /* Efectos generales */
+            a {
+                transition: all 0.3s ease;
+                text-decoration: none;
+            }
+            
+            /* Responsive */
+            @media (max-width: 768px) {
+                .main-container {
+                    padding: 1.5rem 0.5rem;
+                }
+                
+                .navbar-brand {
+                    font-size: 1rem;
+                }
+                
+                .nav-link {
+                    padding: 0.5rem;
+                    font-size: 0.9rem;
+                }
             }
         </style>
     </head>
     <body>
         <!-- Barra de navegación -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+        <nav class="navbar navbar-expand-lg navbar-dark mb-4">
             <div class="container-fluid">
                 <a class="navbar-brand" th:href="@{/Usuario}">
                     <i class="bi bi-people-fill me-2"></i>Sistema de Usuarios
                 </a>
-                <div class="navbar-collapse">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarContent">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" th:href="@{/Usuario/CargaMasiva}">
-                                <i class="bi bi-database-fill"></i>Carga Masiva</a>
+                            <a class="nav-link" th:href="@{/Usuario}">
+                                <i class="bi bi-list-ul"></i> Lista de Usuarios
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/Usuario/Form/0}">
+                                <i class="bi bi-person-plus"></i> Nuevo Usuario
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/Usuario/CargaMasiva}">
+                                <i class="bi bi-database-fill"></i> Carga Masiva
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -60,9 +153,9 @@
         </main>
 
         <!-- Footer -->
-        <footer class="mt-5 py-3 bg-dark text-center">
+        <footer class="py-3">
             <div class="container">
-                <p class="mb-0">© 2024 Sistema de Usuarios</p>
+                <center><p class="mb-0">© 2025 Sistema de Usuarios - Todos los derechos reservados para Carlos Enrique Ramirez Ramos</p></center>
             </div>
         </footer>
 

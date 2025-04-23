@@ -10,17 +10,17 @@
         <!-- Bootstrap Icons -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
         
-        <style>
+         <style>
             :root {
-                --primary-color: #6200ee;
-                --primary-light: #9e47ff;
-                --primary-dark: #0400ba;
+                --primary-color: #4a6bff;
+                --primary-light: #6a8cff;
+                --primary-dark: #2a4bdf;
                 --secondary-color: #03dac6;
-                --background-dark: #121212;
-                --surface-dark: #1e1e1e;
-                --surface-light: #2c2c2c;
-                --text-primary: #e1e1e1;
-                --text-secondary: #a0a0a0;
+                --background-dark: #1e293b;
+                --surface-dark: #2c3e50;
+                --surface-light: #3a4b5d;
+                --text-primary: #ffffff;
+                --text-secondary: #cbd5e1;
             }
             
             body {
@@ -31,8 +31,8 @@
             
             .profile-card {
                 background-color: var(--surface-dark);
-                border-radius: 10px;
-                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+                border-radius: 12px;
+                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
                 overflow: hidden;
                 transition: transform 0.3s;
                 border: none;
@@ -43,7 +43,7 @@
             
             .profile-card:hover {
                 transform: translateY(-5px);
-                box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+                box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
             }
             
             .image-container {
@@ -55,6 +55,7 @@
                 padding: 20px;
                 position: relative;
                 overflow: hidden;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             }
             
             .profile-img {
@@ -63,10 +64,13 @@
                 object-fit: contain;
                 border-radius: 8px;
                 transition: transform 0.3s;
+                border: 2px solid var(--primary-color);
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             }
             
             .profile-img:hover {
                 transform: scale(1.03);
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
             }
             
             .profile-header {
@@ -86,10 +90,11 @@
             
             .address-card {
                 background-color: var(--surface-dark);
-                border-radius: 10px;
-                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+                border-radius: 12px;
+                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
                 border: none;
                 height: 100%;
+                overflow: hidden;
             }
             
             .btn-edit-profile {
@@ -98,36 +103,46 @@
                 padding: 12px 0;
                 font-weight: 500;
                 transition: all 0.3s;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
                 margin-top: auto;
                 width: 100%;
                 border-radius: 6px;
+                color: white;
             }
             
             .btn-edit-profile:hover {
                 background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
                 transform: translateY(-2px);
-                box-shadow: 0 6px 12px rgba(98, 0, 238, 0.3);
+                box-shadow: 0 6px 12px rgba(74, 107, 255, 0.4);
             }
             
             .table {
                 color: var(--text-primary);
-                border-color: var(--surface-light);
+                background-color: var(--surface-light);
+                border-collapse: separate;
+                border-spacing: 0;
+                border-radius: 8px;
+                overflow: hidden;
             }
             
             .table th {
-                background-color: var(--surface-light);
+                background-color: rgba(0, 0, 0, 0.2);
                 color: var(--text-primary);
-                border-color: var(--surface-light);
+                border-bottom: 2px solid var(--primary-color);
+                padding: 15px;
+                text-transform: uppercase;
+                font-size: 0.85rem;
+                letter-spacing: 0.5px;
             }
             
             .table td {
-                border-color: var(--surface-light);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
                 vertical-align: middle;
+                padding: 12px 15px;
             }
             
             .table-hover tbody tr:hover {
-                background-color: rgba(98, 0, 238, 0.1);
+                background-color: rgba(74, 107, 255, 0.15);
             }
             
             .user-info {
@@ -138,11 +153,53 @@
                 display: flex;
                 align-items: center;
                 margin-bottom: 0.75rem;
+                padding: 0.5rem;
+                border-radius: 6px;
+                background-color: rgba(255, 255, 255, 0.05);
             }
             
             .user-info-item i {
                 margin-right: 10px;
                 color: var(--secondary-color);
+                font-size: 1.1rem;
+            }
+            
+            .card-title {
+                color: var(--text-primary);
+                font-weight: 600;
+                padding: 1.5rem;
+                margin: 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .btn-outline-primary {
+                color: var(--primary-color);
+                border-color: var(--primary-color);
+            }
+            
+            .btn-outline-primary:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            
+            @media (max-width: 992px) {
+                .image-container {
+                    height: 250px;
+                }
+            }
+            
+            @media (max-width: 768px) {
+                .image-container {
+                    height: 200px;
+                }
+                
+                .profile-header h3 {
+                    font-size: 1.5rem;
+                }
+                
+                .profile-body h4 {
+                    font-size: 1.3rem;
+                }
             }
         </style>
     </head>

@@ -7,187 +7,231 @@
 
         <!-- Estilos específicos (se heredan las variables del layout) -->
         <style>
-            .header-container {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 2rem;
-                flex-wrap: wrap;
-                gap: 1rem;
-            }
+    .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
 
-            .page-title {
-                color: var(--text-primary);
-                font-weight: 600;
-                margin: 0;
-            }
+    .page-title {
+        color: #ffffff;
+        font-weight: 600;
+        margin: 0;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
 
-            .greeting {
-                color: var(--text-secondary);
-                font-size: 1.1rem;
-            }
+    .greeting {
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 1.1rem;
+    }
 
-            .btn-add {
-                background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
-                border: none;
-                border-radius: 30px;
-                padding: 10px 25px;
-                font-weight: 500;
-                letter-spacing: 0.5px;
-                transition: all 0.3s;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            }
+    .btn-add {
+        background: linear-gradient(135deg, #4a6bff, #6a5acd);
+        border: none;
+        border-radius: 30px;
+        padding: 10px 25px;
+        font-weight: 500;
+        color: white;
+        letter-spacing: 0.5px;
+        transition: all 0.3s;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
 
-            .btn-add:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 12px rgba(98, 0, 238, 0.3);
-                background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
-            }
+    .btn-add:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(74, 107, 255, 0.4);
+        background: linear-gradient(135deg, #3a5bef, #5a4acd);
+    }
 
-            .table-container {
-                background-color: var(--surface-dark);
-                border-radius: 12px;
-                padding: 1.5rem;
-                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-                margin-bottom: 2rem;
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-            }
+    /* Contenedor de la tabla con nuevo fondo */
+    .table-container {
+        background: linear-gradient(135deg, #1e293b, #2c3e50);
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        margin-bottom: 2rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
 
-            .table-container:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
-            }
+    .table-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+    }
 
-            .table {
-                color: var(--text-primary);
-                margin: 0;
-            }
+    /* Estilos para la tabla */
+    .table {
+        background-color: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(8px);
+        color: white;
+        margin: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+        border-radius: 10px;
+        overflow: hidden;
+    }
 
-            .table thead th {
-                background-color: var(--surface-light);
-                color: var(--text-primary);
-                vertical-align: middle;
-                font-weight: 500;
-                border-bottom: 2px solid var(--primary-color);
-            }
+    .table thead th {
+        background-color: rgba(0, 0, 0, 0.25);
+        color: white;
+        vertical-align: middle;
+        font-weight: 500;
+        border-bottom: 2px solid #4a6bff;
+        padding: 15px;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
 
-            .table-striped>tbody>tr:nth-of-type(odd)>* {
-                background-color: rgba(108, 117, 125, 0.05);
-            }
+    .table-striped>tbody>tr:nth-of-type(odd)>* {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
 
-            .table-hover tbody tr:hover {
-                background-color: rgba(108, 117, 125, 0.1);
-            }
+    .table-striped>tbody>tr:nth-of-type(even)>* {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
 
-            .user-avatar {
-                width: 50px;
-                height: 50px;
-                object-fit: cover;
-                border-radius: 50%;
-                border: 2px solid var(--primary-color);
-                transition: transform 0.3s;
-            }
+    .table-hover tbody tr:hover {
+        background-color: rgba(74, 107, 255, 0.15) !important;
+    }
 
-            .user-avatar:hover {
-                transform: scale(1.1);
-            }
+    .table td, .table th {
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 12px 15px;
+    }
 
-            .btn-action {
-                width: 36px;
-                height: 36px;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 50%;
-                transition: all 0.3s;
-            }
+    /* Estilos para elementos específicos */
+    .user-avatar {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 2px solid #4a6bff;
+        transition: transform 0.3s;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
 
-            .btn-delete {
-                background-color: #dc3545;
-                color: white;
-            }
+    .user-avatar:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 15px rgba(74, 107, 255, 0.5);
+    }
 
-            .btn-edit {
-                background: linear-gradient(135deg, #ffc107, #ffab00);
-                color: #212529;
-            }
+    .btn-action {
+        width: 36px;
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s;
+        border: none;
+    }
 
-            .btn-action:hover {
-                transform: scale(1.1);
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            }
+    .btn-delete {
+        background-color: #ff4757;
+        color: white;
+    }
 
-            .contact-info span {
-                display: block;
-                font-size: 0.85rem;
-                line-height: 1.4;
-            }
+    .btn-edit {
+        background: linear-gradient(135deg, #ffa502, #ff7f50);
+        color: white;
+    }
 
-            .contact-info span:first-child {
-                font-weight: 500;
-            }
+    .btn-action:hover {
+        transform: scale(1.15);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
 
-            .address-info span {
-                display: block;
-                font-size: 0.85rem;
-                line-height: 1.4;
-            }
+    .contact-info span {
+        display: block;
+        font-size: 0.85rem;
+        line-height: 1.4;
+        color: rgba(255, 255, 255, 0.9);
+    }
 
-            .empty-state {
-                text-align: center;
-                padding: 3rem;
-                color: var(--text-secondary);
-            }
+    .contact-info span:first-child {
+        font-weight: 500;
+        color: white;
+    }
 
-            .empty-state i {
-                font-size: 3rem;
-                margin-bottom: 1rem;
-                color: var(--primary-color);
-            }
+    .address-info span {
+        display: block;
+        font-size: 0.85rem;
+        line-height: 1.4;
+        color: rgba(255, 255, 255, 0.9);
+    }
 
-            @media (max-width: 768px) {
-                .table-responsive {
-                    border-radius: 0;
-                    padding: 0;
-                }
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: rgba(255, 255, 255, 0.8);
+    }
 
-                .table thead {
-                    display: none;
-                }
+    .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: #4a6bff;
+    }
 
-                .table, .table tbody, .table tr, .table td {
-                    display: block;
-                    width: 100%;
-                }
+    /* Estilos para el switch */
+    .form-switch .form-check-input {
+        background-color: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
 
-                .table tr {
-                    margin-bottom: 1.5rem;
-                    border-bottom: 2px solid var(--primary-color);
-                }
+    .form-switch .form-check-input:checked {
+        background-color: #4a6bff;
+        border-color: #4a6bff;
+    }
 
-                .table td {
-                    text-align: right;
-                    padding-left: 50%;
-                    position: relative;
-                    border-bottom: 1px solid var(--surface-light);
-                }
+    /* Estilos responsive */
+    @media (max-width: 768px) {
+        .table-responsive {
+            border-radius: 0;
+            padding: 0;
+        }
 
-                .table td::before {
-                    content: attr(data-label);
-                    position: absolute;
-                    left: 1rem;
-                    width: 45%;
-                    padding-right: 1rem;
-                    text-align: left;
-                    font-weight: 500;
-                    color: var(--text-secondary);
-                }
+        .table thead {
+            display: none;
+        }
 
-                .btn-action {
-                    margin: 0.3rem;
-                }
-            }
-        </style>
+        .table, .table tbody, .table tr, .table td {
+            display: block;
+            width: 100%;
+        }
+
+        .table tr {
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(30, 41, 59, 0.9) !important;
+        }
+
+        .table td {
+            text-align: right;
+            padding-left: 50%;
+            position: relative;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .table td::before {
+            content: attr(data-label);
+            position: absolute;
+            left: 1rem;
+            width: 45%;
+            padding-right: 1rem;
+            text-align: left;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .btn-action {
+            margin: 0.3rem;
+        }
+    }
+</style>
     </head>
     <body>
         <!-- Contenido principal que reemplazará el fragmento en el layout -->
@@ -196,11 +240,10 @@
                 <div class="header-container">
                     <div>
                         <h1 class="page-title">Gestión de Usuarios</h1>
-                        <span class="greeting">Hola <span th:text="${nombre}"></span></span>
                     </div>
-                    <a class="btn btn-add text-white" th:href="@{/Usuario/Form/0}">
+<!--                    <a class="btn btn-add text-white" th:href="@{/Usuario/Form/0}">
                         <i class="bi bi-person-add me-2"></i> Nuevo Usuario
-                    </a>
+                    </a>-->
                 </div>
 
                 <div class="table-container">
@@ -222,7 +265,13 @@
                             </thead>
                             <tbody>
                                 <tr th:each="UsuarioDireccion : ${listaUsuarios}" th:if="${not listaUsuarios.isEmpty()}">
-                                    <td data-label="ID" th:text="${UsuarioDireccion.Usuario.IdUsuario}"></td>
+                                    <!--<td data-label="ID" th:text="${UsuarioDireccion.Usuario.IdUsuario}"></td>-->
+                                    <td>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" role="switch" id="status">
+                                            <label class="form-check-label" for="status"></label>
+                                        </div>
+                                    </td>
                                     <td data-label="Imagen">
                                         <img class="user-avatar" 
                                              th:src="${UsuarioDireccion.Usuario.Imagen != null} ? 
@@ -278,14 +327,14 @@
 
         <!-- Tooltip activation -->
         <div layout:fragment="scripts">
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'));
-                var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                    return new bootstrap.Tooltip(tooltipTriggerEl);
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'));
+                    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                        return new bootstrap.Tooltip(tooltipTriggerEl);
+                    });
                 });
-            });
-        </script>
-    </div>
-</body>
+            </script>
+        </div>
+    </body>
 </html>

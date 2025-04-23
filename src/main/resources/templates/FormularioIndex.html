@@ -8,42 +8,55 @@
     <!-- Estilos específicos del formulario -->
     <style>
         :root {
-            --primary-color: #6200ee;
-            --primary-light: #9e47ff;
-            --primary-dark: #0400ba;
+            --primary-color: #4a6bff;
+            --primary-light: #6a8cff;
+            --primary-dark: #2a4bdf;
             --secondary-color: #03dac6;
-            --background-dark: #121212;
-            --surface-dark: #1e1e1e;
-            --surface-light: #2c2c2c;
-            --text-primary: #e1e1e1;
-            --text-secondary: #a0a0a0;
+            --background-dark: #1e293b;
+            --surface-dark: #2c3e50;
+            --surface-light: #3a4b5d;
+            --text-primary: #ffffff;
+            --text-secondary: #cbd5e1;
+        }
+
+        .container {
+            max-width: 1200px;
+            padding: 2rem;
         }
 
         .card-main {
             background-color: var(--surface-dark);
             border: none;
             border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
         }
 
         .card-main:hover {
             transform: translateY(-5px);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
         }
 
         .card-header {
             background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
             border-bottom: none;
-            border-radius: 10px 10px 0 0 !important;
             padding: 1.5rem;
+            color: white;
+            text-align: center;
+        }
+
+        .card-header h2 {
+            margin: 0;
+            font-weight: 600;
         }
 
         .section-card {
             background-color: var(--surface-light);
             border-radius: 8px;
-            border-left: 4px solid var(--primary-color);
+            padding: 1.5rem;
             margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary-color);
         }
 
         .section-title {
@@ -52,6 +65,7 @@
             margin-bottom: 1.5rem;
             position: relative;
             padding-left: 15px;
+            font-size: 1.2rem;
         }
 
         .section-title:before {
@@ -67,8 +81,8 @@
         }
 
         .form-control, .form-select {
-            background-color: #333;
-            border: 1px solid #444;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: var(--text-primary);
             border-radius: 6px;
             padding: 10px 15px;
@@ -76,9 +90,9 @@
         }
 
         .form-control:focus, .form-select:focus {
-            background-color: #3a3a3a;
+            background-color: rgba(255, 255, 255, 0.15);
             border-color: var(--primary-light);
-            box-shadow: 0 0 0 0.25rem rgba(98, 0, 238, 0.25);
+            box-shadow: 0 0 0 0.25rem rgba(74, 107, 255, 0.25);
             color: var(--text-primary);
         }
 
@@ -90,8 +104,8 @@
         }
 
         .input-group-text {
-            background-color: #444;
-            border: 1px solid #444;
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: var(--text-secondary);
         }
 
@@ -99,25 +113,33 @@
             background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
             border: none;
             border-radius: 30px;
-            padding: 12px 24px;
+            padding: 12px 30px;
             font-weight: 500;
+            color: white;
             letter-spacing: 0.5px;
-            text-transform: uppercase;
             transition: all 0.3s;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            text-transform: uppercase;
+            font-size: 0.9rem;
         }
 
         .btn-submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(98, 0, 238, 0.3);
+            box-shadow: 0 6px 12px rgba(74, 107, 255, 0.4);
             background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
         }
 
         #previewImage {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            border-radius: 8px;
+            border: 2px solid var(--primary-color);
             transition: all 0.3s;
             cursor: pointer;
             object-fit: cover;
             aspect-ratio: 1/1;
+            background-color: rgba(255, 255, 255, 0.1);
         }
 
         #previewImage:hover {
@@ -129,18 +151,21 @@
             position: relative;
             overflow: hidden;
             border-radius: 8px;
-            background: #333;
+            background: rgba(255, 255, 255, 0.05);
             padding: 1rem;
-            height: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            text-align: center;
         }
 
         .image-upload-container label {
             width: 100%;
-            text-align: center;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-bottom: 1rem;
         }
 
         .floating-label {
@@ -171,9 +196,42 @@
             color: var(--primary-light);
         }
 
+        /* Estilos para la tabla de errores (si es necesario) */
+        .table-errors {
+            background-color: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(8px);
+            color: white;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-errors thead th {
+            background-color: rgba(0, 0, 0, 0.25);
+            color: white;
+            border-bottom: 2px solid var(--primary-color);
+            padding: 15px;
+        }
+
         @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
             .card-main {
-                margin: 1rem;
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .section-card {
+                padding: 1rem;
+            }
+            
+            .floating-label {
+                margin-bottom: 1rem;
             }
         }
     </style>
@@ -187,8 +245,8 @@
                     <input type="hidden" th:field="*{Usuario.IdUsuario}">
                     <input type="hidden" th:field="*{Direccion.IdDireccion}">
 
-                    <div class="card-header text-center">
-                        <h2 class="mb-0"><i class="bi bi-person-badge me-2"></i>Formulario de Usuario</h2>
+                    <div class="card-header">
+                        <h2><i class="bi bi-person-badge me-2"></i>Formulario de Usuario</h2>
                     </div>
 
                     <div class="card-body px-4 py-4">
@@ -200,13 +258,13 @@
                                     <!-- Imagen -->
                                     <div class="col-md-4">
                                         <div class="image-upload-container">
-                                            <label for="imagenFile" class="form-label fw-bold mb-3">
+                                            <label for="imagenFile">
                                                 <i class="bi bi-camera-fill fs-3 d-block mb-2"></i>
                                                 Foto de perfil
                                             </label>
                                             <input type="file" class="form-control d-none" name="imagenFile" id="imagenFile" accept="image/*">
                                             <label for="imagenFile" class="w-100">
-                                                <img id="previewImage" class="img-fluid rounded border w-100" 
+                                                <img id="previewImage" class="img-fluid" 
                                                      th:src="${usuarioDireccion.Usuario.Imagen != null} ? 
                                                      'data:image/png;base64,' + ${usuarioDireccion.Usuario.Imagen} 
                                                      : 'https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png'" 
@@ -218,7 +276,7 @@
 
                                     <!-- Datos del Usuario -->
                                     <div class="col-md-8">
-                                        <div class="section-card p-4 h-100">
+                                        <div class="section-card h-100">
                                             <h5 class="section-title">Datos personales</h5>
                                             <div class="row g-3">
                                                 <div class="col-md-6 floating-label">
@@ -283,7 +341,7 @@
                             <div class="col-12" th:if="${(usuarioDireccion.Usuario.IdUsuario != 0 && usuarioDireccion.Direccion.IdDireccion > 0) 
                                  || (usuarioDireccion.Usuario.IdUsuario != 0 && usuarioDireccion.Direccion.IdDireccion == 0)
                                  || (usuarioDireccion.Usuario.IdUsuario == 0 && usuarioDireccion.Direccion.IdDireccion == 0)}">
-                                <div class="section-card p-4">
+                                <div class="section-card">
                                     <h5 class="section-title">Domicilio</h5>
                                     <div class="row g-3">
                                         <div class="col-md-6 floating-label">
@@ -335,7 +393,7 @@
 
                             <!-- Botón Guardar -->
                             <div class="col-12 text-center">
-                                <button type="submit" class="btn btn-submit mt-2 px-5 py-3">
+                                <button type="submit" class="btn btn-submit">
                                     <i class="bi bi-save-fill me-2"></i>Guardar Usuario
                                 </button>
                             </div>
@@ -366,108 +424,91 @@
                 document.getElementById('imagenFile').click();
             });
 
-            // Validaciones
-            $(document).ready(function () {
-                // Efecto hover para las tarjetas
-                $('.floating-label input, .floating-label select').focus(function () {
-                    $(this).parent().find('label').css('color', '#9e47ff');
-                }).blur(function () {
-                    $(this).parent().find('label').not('.active').css('color', '#a0a0a0');
-                });
+            // Validaciones de cascada para dirección
+            $("#paisddl").change(function () {
+                let idPais = $(this).val();
+                if (idPais != "") {
+                    $.ajax({
+                        type: "GET",
+                        url: "/Usuario/EstadoGetAll/" + idPais,
+                        dataType: "json",
+                        beforeSend: function () {
+                            $("#estadoddl").prop('disabled', true).addClass('loading');
+                        },
+                        success: function (data) {
+                            $("#estadoddl").empty().append('<option value="">Selecciona un estado</option>');
+                            $("#municipioddl").empty().append('<option value="">Selecciona un municipio</option>');
+                            $("#coloniaddl").empty().append('<option value="">Selecciona una colonia</option>');
+                            $.each(data.objects, function (i, estado) {
+                                $("#estadoddl").append('<option value="' + estado.idEstado + '">' + estado.nombre + '</option>');
+                            });
+                        },
+                        complete: function () {
+                            $("#estadoddl").prop('disabled', false).removeClass('loading');
+                        },
+                        error: function () {
+                            alert("Error al cargar estados.");
+                        }
+                    });
+                }
+            });
 
-                // Inicializar etiquetas flotantes
-                $('.floating-label input, .floating-label select').each(function () {
-                    if ($(this).val() !== '') {
-                        $(this).siblings('label').addClass('active');
-                    }
-                });
+            $("#estadoddl").change(function () {
+                let idEstado = $(this).val();
+                if (idEstado != "") {
+                    $.ajax({
+                        type: "GET",
+                        url: "/Usuario/MunicipioGetAll/" + idEstado,
+                        dataType: "json",
+                        beforeSend: function () {
+                            $("#municipioddl").prop('disabled', true).addClass('loading');
+                        },
+                        success: function (data) {
+                            $("#municipioddl").empty().append('<option value="">Selecciona un municipio</option>');
+                            $("#coloniaddl").empty().append('<option value="">Selecciona una colonia</option>');
+                            $.each(data.objects, function (i, municipio) {
+                                $("#municipioddl").append('<option value="' + municipio.idMunicipio + '">' + municipio.nombre + '</option>');
+                            });
+                        },
+                        complete: function () {
+                            $("#municipioddl").prop('disabled', false).removeClass('loading');
+                        },
+                        error: function () {
+                            alert("Error al cargar municipios.");
+                        }
+                    });
+                }
+            });
 
-                // Validaciones de cascada para dirección
-                $("#paisddl").change(function () {
-                    let idPais = $(this).val();
-                    if (idPais != "") {
-                        $.ajax({
-                            type: "GET",
-                            url: "/Usuario/EstadoGetAll/" + idPais,
-                            dataType: "json",
-                            beforeSend: function () {
-                                $("#estadoddl").prop('disabled', true).addClass('loading');
-                            },
-                            success: function (data) {
-                                $("#estadoddl").empty().append('<option value="">Selecciona un estado</option>');
-                                $("#municipioddl").empty().append('<option value="">Selecciona un municipio</option>');
-                                $("#coloniaddl").empty().append('<option value="">Selecciona una colonia</option>');
-                                $.each(data.objects, function (i, estado) {
-                                    $("#estadoddl").append('<option value="' + estado.idEstado + '">' + estado.nombre + '</option>');
-                                });
-                            },
-                            complete: function () {
-                                $("#estadoddl").prop('disabled', false).removeClass('loading');
-                            },
-                            error: function () {
-                                alert("Error al cargar estados.");
-                            }
-                        });
-                    }
-                });
+            $("#municipioddl").change(function () {
+                let idMunicipio = $(this).val();
+                if (idMunicipio != "") {
+                    $.ajax({
+                        type: "GET",
+                        url: "/Usuario/ColoniaGetAll/" + idMunicipio,
+                        dataType: "json",
+                        beforeSend: function () {
+                            $("#coloniaddl").prop('disabled', true).addClass('loading');
+                        },
+                        success: function (data) {
+                            $("#coloniaddl").empty().append('<option value="">Selecciona una colonia</option>');
+                            $.each(data.objects, function (i, colonia) {
+                                $("#coloniaddl").append('<option value="' + colonia.idColonia + '" data-cp="' + colonia.codigoPostal + '">' + colonia.nombre + '</option>');
+                            });
+                        },
+                        complete: function () {
+                            $("#coloniaddl").prop('disabled', false).removeClass('loading');
+                        },
+                        error: function () {
+                            alert("Error al cargar colonias.");
+                        }
+                    });
+                }
+            });
 
-                $("#estadoddl").change(function () {
-                    let idEstado = $(this).val();
-                    if (idEstado != "") {
-                        $.ajax({
-                            type: "GET",
-                            url: "/Usuario/MunicipioGetAll/" + idEstado,
-                            dataType: "json",
-                            beforeSend: function () {
-                                $("#municipioddl").prop('disabled', true).addClass('loading');
-                            },
-                            success: function (data) {
-                                $("#municipioddl").empty().append('<option value="">Selecciona un municipio</option>');
-                                $("#coloniaddl").empty().append('<option value="">Selecciona una colonia</option>');
-                                $.each(data.objects, function (i, municipio) {
-                                    $("#municipioddl").append('<option value="' + municipio.idMunicipio + '">' + municipio.nombre + '</option>');
-                                });
-                            },
-                            complete: function () {
-                                $("#municipioddl").prop('disabled', false).removeClass('loading');
-                            },
-                            error: function () {
-                                alert("Error al cargar municipios.");
-                            }
-                        });
-                    }
-                });
-
-                $("#municipioddl").change(function () {
-                    let idMunicipio = $(this).val();
-                    if (idMunicipio != "") {
-                        $.ajax({
-                            type: "GET",
-                            url: "/Usuario/ColoniaGetAll/" + idMunicipio,
-                            dataType: "json",
-                            beforeSend: function () {
-                                $("#coloniaddl").prop('disabled', true).addClass('loading');
-                            },
-                            success: function (data) {
-                                $("#coloniaddl").empty().append('<option value="">Selecciona una colonia</option>');
-                                $.each(data.objects, function (i, colonia) {
-                                    $("#coloniaddl").append('<option value="' + colonia.idColonia + '" data-cp="' + colonia.codigoPostal + '">' + colonia.nombre + '</option>');
-                                });
-                            },
-                            complete: function () {
-                                $("#coloniaddl").prop('disabled', false).removeClass('loading');
-                            },
-                            error: function () {
-                                alert("Error al cargar colonias.");
-                            }
-                        });
-                    }
-                });
-
-                $("#coloniaddl").change(function () {
-                    let cp = $(this).find("option:selected").data("cp");
-                    $("#codigoPostal").val(cp || '');
-                });
+            $("#coloniaddl").change(function () {
+                let cp = $(this).find("option:selected").data("cp");
+                $("#codigoPostal").val(cp || '');
             });
         </script>
     </th:block>
