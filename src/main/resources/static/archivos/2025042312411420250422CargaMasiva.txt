@@ -1,0 +1,5 @@
+mperez|María|Pérez|García|5512345678|2|maria.p@mail.com|Mpass123|1990-03-15|MAPG900315MDFXXX1|5512345679|F|maria.jpg|Héroes Tecamac|12|34|1|55764
+jrodrig|Javier|Rodríguez|López|5523456789|3|j.rodriguez@corp.com|Jpass456|1985-07-22|JARL850722HDFXXX2|5523456790|M|javier.jpg|5 de Septiembre|45|67|11|55330
+lhernan|Luisa|Hernández|Méndez|5534567890|1|luisa.h@admin.com|Lpass789|1988-11-30|LUHM881130MDFXXX3|5534567891|F|luisa.jpg|Cancún Centro|78|90|21|77500
+gflores|Gerardo|Flores|Ramírez|5545678901|4|g.flores@seg.com|Gpass012|1993-05-10|GEFR930510HDFXXX4|5545678902|M|gerardo.jpg|Santa Catarina Centro|123|456|36|66100
+acastro|Alejandra|Castro|Sánchez|5556789012|2|a.castro@mail.com|Apass345|1995-09-05|AACS950905MDFXXX5|5556789013|F|ale.jpg|Lomas de Ojo de Agua|23|45|16|55770
