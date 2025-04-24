@@ -27,6 +27,7 @@ public class Usuario {
     private String Celular;
     private String Curp;
     public Rol Rol;
+    private int Status;
     @NotNull(message = "No se permiten nulos")
 
     
@@ -35,6 +36,16 @@ public class Usuario {
 
     }
 
+    public int getStatus() {
+        return Status;
+    }
+
+    public void setStatus(int Status) {
+        this.Status = Status;
+    }
+
+    
+    
     public String getImagen() {
         return Imagen;
     }

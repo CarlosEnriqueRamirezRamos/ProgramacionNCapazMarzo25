@@ -77,6 +77,7 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
                                 usuarioDireccion.usuario.setTelefono(resultSet.getString("Telefono"));
                                 usuarioDireccion.usuario.setCelular(resultSet.getString("Celular"));
                                 usuarioDireccion.usuario.setCurp(resultSet.getString("Curp"));
+                                usuarioDireccion.usuario.setStatus(resultSet.getInt("Status"));
                                 Direccion direccion = new Direccion();
                                 direccion.setIdDireccion(resultSet.getInt("IdDireccion"));
                                 direccion.setCalle(resultSet.getString("Calle"));

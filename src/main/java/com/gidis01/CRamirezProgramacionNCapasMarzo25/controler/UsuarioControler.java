@@ -40,11 +40,14 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -208,8 +211,8 @@ public class UsuarioControler {
         try {
             if (archivo == null || archivo.isEmpty()) {
                 model.addAttribute("archivoCorrecto", false);
-                model.addAttribute("listaErrores", 
-                    Collections.singletonList(new ResultFile(0, "", "No se seleccionó archivo")));
+                model.addAttribute("listaErrores",
+                        Collections.singletonList(new ResultFile(0, "", "No se seleccionó archivo")));
                 return "CargaMasiva";
             }
 
@@ -218,27 +221,27 @@ public class UsuarioControler {
             String path = "src/main/resources/static/archivos";
             String fecha = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmSS"));
             String absolutePath = root + "/" + path + "/" + fecha + archivo.getOriginalFilename();
-            
+
             new File(root + "/" + path).mkdirs();
             archivo.transferTo(new File(absolutePath));
 
-            List<UsuarioDireccion> listaUsuarios = tipoArchivo.equals("txt") 
-                ? LecturaArchivoTXT(new File(absolutePath))
-                : LecturaArchivoExcel(new File(absolutePath));
+            List<UsuarioDireccion> listaUsuarios = tipoArchivo.equals("txt")
+                    ? LecturaArchivoTXT(new File(absolutePath))
+                    : LecturaArchivoExcel(new File(absolutePath));
 
             List<ResultFile> listaErrores = ValidarArchivo(listaUsuarios);
 
             model.addAttribute("archivoCorrecto", true);
             model.addAttribute("listaErrores", listaErrores);
-            
+
             if (listaErrores.isEmpty()) {
                 session.setAttribute("urlFile", absolutePath);
             }
 
         } catch (Exception ex) {
             model.addAttribute("archivoCorrecto", false);
-            model.addAttribute("listaErrores", 
-                Collections.singletonList(new ResultFile(0, "", "Error al procesar archivo")));
+            model.addAttribute("listaErrores",
+                    Collections.singletonList(new ResultFile(0, "", "Error al procesar archivo")));
         }
         return "CargaMasiva";
     }
@@ -249,13 +252,13 @@ public class UsuarioControler {
         if (filePath != null) {
             try {
                 List<UsuarioDireccion> usuarios = filePath.endsWith(".txt")
-                    ? LecturaArchivoTXT(new File(filePath))
-                    : LecturaArchivoExcel(new File(filePath));
-                
+                        ? LecturaArchivoTXT(new File(filePath))
+                        : LecturaArchivoExcel(new File(filePath));
+
                 for (UsuarioDireccion usuario : usuarios) {
                     usuarioDAOImplementation.Add(usuario);
                 }
-                
+
                 new File(filePath).delete();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -263,6 +266,50 @@ public class UsuarioControler {
             session.removeAttribute("urlFile");
         }
         return "redirect:/Usuario/CargaMasiva";
+    }
+
+    @ResponseBody
+    @PostMapping("/UpdateStatus")
+    public Result updateStatus(@RequestBody Map<String, Integer> datos) {
+        Result result = new Result();
+
+        try {
+            // 1. Obtener datos del request
+            Integer idUsuario = datos.get("idUsuario");
+            Integer status = datos.get("status");
+
+            // 2. Validaciones básicas
+            if (idUsuario == null || status == null) {
+                result.setSuccess(false);
+                result.setError("Datos incompletos");
+                return result;
+            }
+
+            // 3. Obtener usuario existente
+            Usuario usuario = (Usuario) usuarioDAOImplementation.GetById(idUsuario).object;
+
+            if (usuario == null) {
+                result.setSuccess(false);
+                result.setError("Usuario no encontrado");
+                return result;
+            }
+
+            // 4. Actualizar estado
+            usuario.setStatus(status);
+
+            // 5. Guardar cambios
+            usuarioDAOImplementation.Update(usuario);
+
+            // 6. Configurar respuesta exitosa
+            result.setSuccess(true);
+            result.setMessage("Estado actualizado correctamente");
+
+        } catch (Exception e) {
+            result.setSuccess(false);
+            result.setError("Error al actualizar: " + e.getMessage());
+        }
+
+        return result;
     }
 
     private List<UsuarioDireccion> leerArchivo(String filePath) throws Exception {
