@@ -10,5 +10,7 @@ public interface IUsuarioDAO {
     Result direccionesByIdUsuario(int IdUsuario);
     Result GetById(int IdUsuario);
     Result Update(Usuario usuario);
+    Result UpdateStatus(Usuario usuario);
+    Result GetAllJPA();
 //    Result Update(int IdUsuario);
 }

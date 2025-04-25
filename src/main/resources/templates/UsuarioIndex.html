@@ -365,7 +365,7 @@
                             },
                             error: function () {
                                 $(checkbox).prop('checked', !$(checkbox).is(':checked'));
-                                alert("Error de conexión");
+                                alert("Error de conexión"); //En esta parte es donde creo que se encuentra el error ya que devuelve un valor nulo pero la informacion en la base de datos si se modifica
                             }
                         });
                     }

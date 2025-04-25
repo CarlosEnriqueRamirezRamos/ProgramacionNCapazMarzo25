@@ -9,9 +9,12 @@ import com.gidis01.CRamirezProgramacionNCapasMarzo25.ML.Municipio;
 import com.gidis01.CRamirezProgramacionNCapasMarzo25.ML.Pais;
 import com.gidis01.CRamirezProgramacionNCapasMarzo25.ML.Result;
 import com.gidis01.CRamirezProgramacionNCapasMarzo25.ML.Rol;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import java.sql.ResultSet;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.CallableStatementCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,7 +26,8 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
     @Autowired //Inyección dependencias (field, contructor, setter)
     public JdbcTemplate jdbcTemplate; // conexión directa
 
-    @Autowired
+    @Autowired //Conexion de JPA
+    private EntityManager EntityManager;
 
     @Override
     public Result GetAll() {
@@ -112,6 +116,14 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
         }
         return result; // Devuelve el resultado al final del método.
     }
+    
+    @Override
+     public Result GetAllJPA() {
+         //  Esto es lenguaje JPQL
+         TypedQuery<com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Usuario> queryUsuarios = EntityManager.createQuery("FROM Usuario", com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Usuario.class);
+         List<com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Usuario> alumnos = queryUsuarios.getResultList();
+         return null;
+     }
 
     @Override
     public Result Add(UsuarioDireccion usuarioDireccion) {
@@ -243,7 +255,7 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
                             usuarioDireccion.usuario.setApellidoPaterno(resultSet.getString("ApellidoPaterno"));
                             usuarioDireccion.usuario.setApellidoMaterno(resultSet.getString("ApellidoMaterno"));
                             usuarioDireccion.usuario.setTelefono(resultSet.getString("Telefono"));
-                            usuarioDireccion.usuario.setTelefono(resultSet.getString("Telefono"));
+                            usuarioDireccion.usuario.setStatus(resultSet.getInt("Status"));
                             usuarioDireccion.usuario.setFechaNacimiento(resultSet.getDate("FechaNacimiento"));
                             usuarioDireccion.usuario.setEmail(resultSet.getString("Email"));
                             usuarioDireccion.usuario.setPassword(resultSet.getString("Password"));
@@ -268,46 +280,71 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
     }
 
     @Override
-public Result Update(Usuario usuario) {
-    Result result = new Result();
+    public Result Update(Usuario usuario) {
+        Result result = new Result();
 
-    try {
-        jdbcTemplate.execute(
-            "{call UsuarioUpdate(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}", 
-            (CallableStatementCallback<Boolean>) callableStatement -> {
-                // Configurar parámetros según el procedimiento almacenado
-                callableStatement.setInt(1, usuario.getIdUsuario());
-                callableStatement.setString(2, usuario.getUserName());
-                callableStatement.setString(3, usuario.getNombre());
-                callableStatement.setString(4, usuario.getApellidoPaterno());
-                callableStatement.setString(5, usuario.getApellidoMaterno());
-                callableStatement.setInt(6, usuario.getRol().getIdRol());
-                callableStatement.setString(7, usuario.getEmail());
-                callableStatement.setString(8, usuario.getPassword());
-                callableStatement.setDate(9, new java.sql.Date(usuario.getFechaNacimiento().getTime()));
-                callableStatement.setString(10, usuario.getCurp());
-                callableStatement.setString(11, usuario.getCelular());
-                callableStatement.setString(12, usuario.getSexo());
-                callableStatement.setString(13, usuario.getTelefono());
-                callableStatement.setString(14, usuario.getImagen());
+        try {
+            jdbcTemplate.execute(
+                    "{call UsuarioUpdate(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}",
+                    (CallableStatementCallback<Boolean>) callableStatement -> {
+                        // Configurar parámetros según el procedimiento almacenado
+                        callableStatement.setInt(1, usuario.getIdUsuario());
+                        callableStatement.setString(2, usuario.getUserName());
+                        callableStatement.setString(3, usuario.getNombre());
+                        callableStatement.setString(4, usuario.getApellidoPaterno());
+                        callableStatement.setString(5, usuario.getApellidoMaterno());
+                        callableStatement.setInt(6, usuario.getRol().getIdRol());
+                        callableStatement.setString(7, usuario.getEmail());
+                        callableStatement.setString(8, usuario.getPassword());
+                        callableStatement.setDate(9, new java.sql.Date(usuario.getFechaNacimiento().getTime()));
+                        callableStatement.setString(10, usuario.getCurp());
+                        callableStatement.setString(11, usuario.getCelular());
+                        callableStatement.setString(12, usuario.getSexo());
+                        callableStatement.setString(13, usuario.getTelefono());
+                        callableStatement.setString(14, usuario.getImagen());
 
-                // Ejecutar el procedimiento
-                boolean hasResults = callableStatement.execute();
-                
-                // Verificar si se actualizó correctamente
-                result.correct = true;
-                return true;
-            }
-        );
-    } catch (Exception ex) {
-        result.correct = false;
-        result.errorMessage = "Error al actualizar usuario: " + ex.getMessage();
-        result.ex = ex;
-        // Log detallado del error
-        System.err.println("Error en UsuarioDAO.Update:");
-        ex.printStackTrace();
+                        // Ejecutar el procedimiento
+                        boolean hasResults = callableStatement.execute();
+
+                        // Verificar si se actualizó correctamente
+                        result.correct = true;
+                        return true;
+                    }
+            );
+        } catch (Exception ex) {
+            result.correct = false;
+            result.errorMessage = "Error al actualizar usuario: " + ex.getMessage();
+            result.ex = ex;
+            // Log detallado del error
+            System.err.println("Error en UsuarioDAO.Update:");
+            ex.printStackTrace();
+        }
+
+        return result;
     }
 
-    return result;
-}
+    @Override
+    public Result UpdateStatus(Usuario usuario) {
+        Result result = new Result();
+
+        try {
+            jdbcTemplate.execute("{call UpdateStatusById(?,?)}",
+                    (CallableStatementCallback<Boolean>) callableStatement -> {
+                        callableStatement.setInt(1, usuario.getIdUsuario());
+                        callableStatement.setInt(2, usuario.getStatus());
+
+                        boolean REsults = callableStatement.execute();
+                        result.correct = true;
+                        return true;
+                    }
+            );
+        } catch (Exception ex) {
+            result.correct = false;
+            result.errorMessage = "Error al actualizar usuario: " + ex.getMessage();
+            result.ex = ex;
+            // Log detallado del error
+            ex.printStackTrace();
+        }
+        return result;
+    }
 }

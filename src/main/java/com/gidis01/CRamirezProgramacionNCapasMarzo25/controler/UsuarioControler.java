@@ -81,6 +81,7 @@ public class UsuarioControler {
 
     @GetMapping
     public String Index(Model model) {
+        usuarioDAOImplementation.GetAllJPA();
         Result result = usuarioDAOImplementation.GetAll();
         model.addAttribute("listaUsuarios", result.objects);
         System.out.println("Usuarios encontrados: " + result.objects);
@@ -274,39 +275,25 @@ public class UsuarioControler {
         Result result = new Result();
 
         try {
-            // 1. Obtener datos del request
             Integer idUsuario = datos.get("idUsuario");
             Integer status = datos.get("status");
 
-            // 2. Validaciones básicas
             if (idUsuario == null || status == null) {
                 result.setSuccess(false);
                 result.setError("Datos incompletos");
                 return result;
             }
 
-            // 3. Obtener usuario existente
-            Usuario usuario = (Usuario) usuarioDAOImplementation.GetById(idUsuario).object;
-
-            if (usuario == null) {
-                result.setSuccess(false);
-                result.setError("Usuario no encontrado");
-                return result;
-            }
-
-            // 4. Actualizar estado
+            Usuario usuario = new Usuario();
+            usuario.setIdUsuario(idUsuario);
             usuario.setStatus(status);
 
-            // 5. Guardar cambios
-            usuarioDAOImplementation.Update(usuario);
+            result = usuarioDAOImplementation.UpdateStatus(usuario);
+            
 
-            // 6. Configurar respuesta exitosa
-            result.setSuccess(true);
-            result.setMessage("Estado actualizado correctamente");
-
-        } catch (Exception e) {
+        } catch (Exception ex) {
             result.setSuccess(false);
-            result.setError("Error al actualizar: " + e.getMessage());
+            result.setError("Error al actualizar: " + ex.getMessage());
         }
 
         return result;
