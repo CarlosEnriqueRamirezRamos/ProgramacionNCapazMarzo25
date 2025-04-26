@@ -1,18 +1,28 @@
 package com.gidis01.CRamirezProgramacionNCapasMarzo25.DAO;
 
+import com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.*;
 import com.gidis01.CRamirezProgramacionNCapasMarzo25.ML.Estado;
 import com.gidis01.CRamirezProgramacionNCapasMarzo25.ML.Result;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import java.sql.ResultSet;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.CallableStatementCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+
+
 @Repository
 public class EstadoDAOImplemetation implements IEstadoDAO {
 
+    
+    @Autowired
+    private EntityManager entityManager;
+    
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -61,5 +71,13 @@ public Result GetAll(int IdPais) {
 }
 
 
-
+@Override
+    public Result GetAllJPA(int IdPais){
+        com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Pais paisJPA = new com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Pais();
+        TypedQuery<com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Pais> queryPais = entityManager.createQuery("FROM Estado WHERE Pais.Idpais",
+                com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Pais.class);
+        List<com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Pais> paisesJPA  = queryPais.getResultList();
+        paisesJPA =  (List<Pais>) entityManager.find(com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Pais.class, IdPais);
+        return null;
+    }
 }

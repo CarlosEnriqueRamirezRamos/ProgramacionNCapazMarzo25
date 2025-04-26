@@ -1,33 +1,27 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 
-/**
- *
- * @author alien 4
- */
+@Entity
 public class Rol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idrol")
-    private int IdSemestre;
+    @Column(name = "idroll")
+    private int IdRol;
     
     @Column(name = "nombre")
      private String Nombre;
 
-    public int getIdSemestre() {
-        return IdSemestre;
+    public int getIdRol() {
+        return IdRol;
     }
 
-    public void setIdSemestre(int IdSemestre) {
-        this.IdSemestre = IdSemestre;
+    public void setIdRol(int IdRol) {
+        this.IdRol = IdRol;
     }
 
     public String getNombre() {
@@ -37,6 +31,7 @@ public class Rol {
     public void setNombre(String Nombre) {
         this.Nombre = Nombre;
     }
- 
+
+    
     
 }

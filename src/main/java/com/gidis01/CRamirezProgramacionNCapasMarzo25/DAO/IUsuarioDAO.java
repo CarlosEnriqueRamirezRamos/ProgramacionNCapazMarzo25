@@ -12,5 +12,6 @@ public interface IUsuarioDAO {
     Result Update(Usuario usuario);
     Result UpdateStatus(Usuario usuario);
     Result GetAllJPA();
+    Result AddJPA();
 //    Result Update(int IdUsuario);
 }

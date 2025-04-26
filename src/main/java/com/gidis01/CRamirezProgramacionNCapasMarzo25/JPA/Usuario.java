@@ -1,12 +1,14 @@
 
 package com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA;
 
-import com.gidis01.CRamirezProgramacionNCapasMarzo25.ML.Rol;
+import com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Rol;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
 import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -26,7 +28,8 @@ public class Usuario {
     @Column(name = "apellidomaterno")
     private String ApellidoMaterno;
     
-    @Column(name = "idrol")
+    @JoinColumn(name = "idroll")
+    @ManyToOne
     private Rol Rol;
     
     @Column(name = "username")
@@ -34,10 +37,29 @@ public class Usuario {
     
     @Column(name = "email")
      private String Email;
+    
+    @Column(name = "password")
+    private String Password;
      
      @Column(name = "fechanacimiento")
      @DateTimeFormat(pattern = "yyyy-MM-dd")
      private Date FechaNacimiento;
+     
+     @Column(name = "telefono")
+     private String Telfono;
+
+     @Column(name = "curp")
+     private String Curp;
+     
+     
+     @Column(name = "celular")
+     private String Celular;
+     
+     @Column(name = "sexo")
+     private String Sexo;
+     
+     @Column(name = "status")
+     private int Status;
      
      @Lob
      @Column(name = "imagen")
@@ -108,12 +130,62 @@ public class Usuario {
         this.Email = Email;
     }
 
+    public String getPassword() {
+        return Password;
+    }
+
+    public void setPassword(String Password) {
+        this.Password = Password;
+    }
+    
+    
+
     public Date getFechaNacimiento() {
         return FechaNacimiento;
     }
 
     public void setFechaNacimiento(Date FechaNacimiento) {
         this.FechaNacimiento = FechaNacimiento;
+    }
+
+    public String getTelfono() {
+        return Telfono;
+    }
+
+    public void setTelfono(String Telfono) {
+        this.Telfono = Telfono;
+    }
+
+    public String getCurp() {
+        return Curp;
+    }
+
+    public void setCurp(String Curp) {
+        this.Curp = Curp;
+    }
+
+    public String getCelular() {
+        return Celular;
+    }
+
+    public void setCelular(String Celular) {
+        this.Celular = Celular;
+    }
+
+    public String getSexo() {
+        return Sexo;
+    }
+
+    public void setSexo(String Sexo) {
+        this.Sexo = Sexo;
+    }
+
+    public int getStatus() {
+        return Status;
+    }
+
+    public void setStatus(int Status) {
+        this.Status = Status;
     }
 
     public String getImagen() {
@@ -123,6 +195,6 @@ public class Usuario {
     public void setImagen(String Imagen) {
         this.Imagen = Imagen;
     }
-     
+
      
 }

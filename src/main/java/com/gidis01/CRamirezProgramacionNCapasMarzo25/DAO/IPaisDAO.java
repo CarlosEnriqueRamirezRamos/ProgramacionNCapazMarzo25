@@ -12,4 +12,5 @@ import com.gidis01.CRamirezProgramacionNCapasMarzo25.ML.Result;
  */
 public interface IPaisDAO {
     Result PaisGetAll();
+    Result PaisGetAllJPA();
 }

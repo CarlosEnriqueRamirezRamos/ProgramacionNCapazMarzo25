@@ -116,14 +116,70 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
         }
         return result; // Devuelve el resultado al final del método.
     }
+
+    @Override
+    public Result GetAllJPA() {
+        //  Esto es lenguaje JPQL
+        Result result = new Result();
+        try {
+            TypedQuery<com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Usuario> queryUsuarios = EntityManager.createQuery("FROM Usuario", com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Usuario.class);
+            List<com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Usuario> usuarios = queryUsuarios.getResultList();
+            result.objects = new ArrayList<>();
+            for (com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Usuario usuario : usuarios) {
+                UsuarioDireccion usuarioDireccion = new UsuarioDireccion();
+                usuarioDireccion.usuario = new Usuario();
+                usuarioDireccion.usuario.setIdUsuario(usuario.getIdUsuario());
+                usuarioDireccion.usuario.setUserName(usuario.getUsername());
+                usuarioDireccion.usuario.setNombre(usuario.getNombre());
+                usuarioDireccion.usuario.setApellidoPaterno(usuario.getApellidoPaterno());
+                usuarioDireccion.usuario.setApellidoMaterno(usuario.getApellidoMaterno());
+                usuarioDireccion.usuario.setTelefono(usuario.getTelfono());
+                usuarioDireccion.usuario.setEmail(usuario.getEmail());
+                usuarioDireccion.usuario.setPassword(usuario.getPassword());
+                usuarioDireccion.usuario.setFechaNacimiento(usuario.getFechaNacimiento());
+                usuarioDireccion.usuario.setCurp(usuario.getCurp());
+                usuarioDireccion.usuario.setCelular(usuario.getCurp());
+                usuarioDireccion.usuario.setSexo(usuario.getSexo());
+                usuarioDireccion.usuario.setStatus(usuario.getStatus());
+                usuarioDireccion.usuario.setImagen(usuario.getImagen());
+
+                TypedQuery<com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Direccion> queryDireccion = EntityManager.createQuery("FROM Direccion WHERE Usuario.IdUsuario = :idusuario", com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Direccion.class);
+                queryDireccion.setParameter("idusuario", usuario.getIdUsuario());
+
+                List<com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Direccion> direccionesJPA = queryDireccion.getResultList();
+                usuarioDireccion.direcciones = new ArrayList<>();
+                for (com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Direccion direccionJPA : direccionesJPA) {
+                    Direccion direccion = new Direccion();
+                    direccion.setCalle(direccionJPA.getCalle());
+                    direccion.setNumeroExterior(direccionJPA.getNumeroExterior());
+                    direccion.setNumeroInterior(direccionJPA.getNumeroInterior());
+                    direccion.Colonia = new Colonia();
+                    direccion.Colonia.setIdColonia(direccionJPA.Colonia.getIdColonia());
+                    
+                    usuarioDireccion.direcciones.add(direccion);
+                }
+                result.objects.add(usuarioDireccion);
+
+            }
+            result.correct = true;
+        } catch (Exception ex) {
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+        return result;
+    }
     
     @Override
-     public Result GetAllJPA() {
-         //  Esto es lenguaje JPQL
-         TypedQuery<com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Usuario> queryUsuarios = EntityManager.createQuery("FROM Usuario", com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Usuario.class);
-         List<com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Usuario> alumnos = queryUsuarios.getResultList();
-         return null;
-     }
+    public Result AddJPA(){
+        Result result = new Result();
+        try{
+        
+    }catch(Exception ex){
+        
+    }
+        return result;
+    }
 
     @Override
     public Result Add(UsuarioDireccion usuarioDireccion) {
@@ -262,6 +318,7 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
                             usuarioDireccion.usuario.setCurp(resultSet.getString("Curp"));
                             usuarioDireccion.usuario.setCelular(resultSet.getString("Celular"));
                             usuarioDireccion.usuario.setSexo(resultSet.getString("Sexo"));
+                            usuarioDireccion.usuario.setPassword(resultSet.getString("Password"));
                             usuarioDireccion.usuario.Rol = new Rol();
                             usuarioDireccion.usuario.Rol.setIdRol(resultSet.getInt("IdRoll"));
                             usuarioDireccion.usuario.Rol.setNombre("NombreRol");

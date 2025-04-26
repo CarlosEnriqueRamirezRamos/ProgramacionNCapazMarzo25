@@ -82,10 +82,11 @@ public class UsuarioControler {
     @GetMapping
     public String Index(Model model) {
         usuarioDAOImplementation.GetAllJPA();
-        Result result = usuarioDAOImplementation.GetAll();
-        model.addAttribute("listaUsuarios", result.objects);
-        System.out.println("Usuarios encontrados: " + result.objects);
-        System.out.println("¿Correcto?: " + result.correct);
+         Result resultJPA = usuarioDAOImplementation.GetAllJPA();
+//        Result result = usuarioDAOImplementation.GetAll();
+        model.addAttribute("listaUsuarios", resultJPA.objects);
+        System.out.println("Usuarios encontrados: " + resultJPA.objects);
+        System.out.println("¿Correcto?: " + resultJPA.correct);
 
         return "UsuarioIndex";
     }

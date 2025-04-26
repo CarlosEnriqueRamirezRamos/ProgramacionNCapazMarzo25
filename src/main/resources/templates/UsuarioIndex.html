@@ -241,9 +241,6 @@
                     <div>
                         <h1 class="page-title">Gestión de Usuarios</h1>
                     </div>
-                    <!--                    <a class="btn btn-add text-white" th:href="@{/Usuario/Form/0}">
-                                            <i class="bi bi-person-add me-2"></i> Nuevo Usuario
-                                        </a>-->
                 </div>
 
                 <div class="table-container">
@@ -293,10 +290,19 @@
                                     <td data-label="Nacimiento" th:text="${UsuarioDireccion.Usuario.FechaNacimiento}"></td>
                                     <td data-label="CURP" th:text="${UsuarioDireccion.Usuario.Curp}"></td>
                                     <td data-label="Sexo" th:text="${UsuarioDireccion.Usuario.Sexo}"></td>
-                                    <td data-label="Dirección" class="address-info" th:each="direccion : ${UsuarioDireccion.Direcciones}">
-                                        <span th:text="|${direccion.Calle} ${direccion.NumeroExterior} ${direccion.NumeroInterior != '' ? 'Int. ' + direccion.NumeroInterior : ''}|"></span>
-                                        <span th:text="|${direccion.Colonia.Nombre}, C.P. ${direccion.Colonia.CodigoPostal}|"></span>
+
+                                    <td data-label="Dirección" class="address-info">
+                                        <div th:if="${UsuarioDireccion.Direcciones != null and not UsuarioDireccion.Direcciones.isEmpty()}">
+                                            <div th:each="direccion, stat : ${UsuarioDireccion.Direcciones}">
+                                                <span th:text="|${direccion.Calle} ${direccion.NumeroExterior} ${direccion.NumeroInterior != null and direccion.NumeroInterior != '' ? 'Int. ' + direccion.NumeroInterior : ''}|"></span>
+                                                <span th:if="${direccion.Colonia != null}" 
+                                                      th:text="|${direccion.Colonia.Nombre}, C.P. ${direccion.Colonia.CodigoPostal}|"></span>
+                                                <span th:unless="${direccion.Colonia != null}">(sin colonia especificada)</span>
+                                                <hr th:unless="${stat.last}" style="margin: 5px 0; border-color: rgba(255,255,255,0.1)">
+                                            </div>
+                                        </div>
                                     </td>
+
                                     <td data-label="Acciones">
                                         <a class="btn btn-action btn-delete" href="#" title="Eliminar">
                                             <i class="bi bi-trash3-fill"></i>
@@ -332,47 +338,50 @@
         <!-- Tooltip activation -->
         <div layout:fragment="scripts">
             <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'));
-                        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                            return new bootstrap.Tooltip(tooltipTriggerEl);
-                        });
-                    });
+                                                    document.addEventListener('DOMContentLoaded', function () {
+                                                        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'));
+                                                        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                                                            return new bootstrap.Tooltip(tooltipTriggerEl);
+                                                        });
+                                                    });
 
-                    function updateStatus(checkbox) {
-                        let userId = $(checkbox).data('idusuario');
-                        let newStatus = $(checkbox).is(':checked') ? 1 : 0;
+                                                    function updateStatus(checkbox) {
+                                                        let userId = $(checkbox).data('idusuario');
+                                                        let newStatus = $(checkbox).is(':checked') ? 1 : 0;
 
-                        $.ajax({
-                            type: "POST",
-                            url: "/Usuario/UpdateStatus",
-                            contentType: "application/json",
-                            data: JSON.stringify({
-                                idUsuario: userId,
-                                status: newStatus
-                            }),
-                            beforeSend: function () {
-                                $(checkbox).prop('disabled', true);
-                            },
-                            success: function (response) {
-                                if (!response.success) {
-                                    $(checkbox).prop('checked', !$(checkbox).is(':checked'));
-                                    alert(response.error);
-                                }
-                            },
-                            complete: function () {
-                                $(checkbox).prop('disabled', false);
-                            },
-                            error: function () {
-                                $(checkbox).prop('checked', !$(checkbox).is(':checked'));
-                                alert("Error de conexión"); //En esta parte es donde creo que se encuentra el error ya que devuelve un valor nulo pero la informacion en la base de datos si se modifica
-                            }
-                        });
-                    }
+                                                        console.log(userId);
+                                                        console.log(newStatus);
+
+                                                        $.ajax({
+                                                            type: "POST",
+                                                            url: "/Usuario/UpdateStatus",
+                                                            contentType: "application/json",
+                                                            data: JSON.stringify({
+                                                                idUsuario: userId,
+                                                                status: newStatus
+                                                            }),
+//                            beforeSend: function () {
+//                                $(checkbox).prop('disabled', true);
+//                            },
+                                                            success: function (response) {
+                                                                if (!response.correct) {
+                                                                    $(checkbox).prop('checked', !$(checkbox).is(':checked'));
+                                                                    alert(response.error);
+                                                                }
+                                                            },
+                                                            complete: function () {
+                                                                $(checkbox).prop('disabled', false);
+                                                            },
+                                                            error: function () {
+                                                                $(checkbox).prop('checked', !$(checkbox).is(':checked'));
+                                                                alert("Error de conexión"); //En esta parte es donde creo que se encuentra el error ya que devuelve un valor nulo pero la informacion en la base de datos si se modifica
+                                                            }
+                                                        });
+                                                    }
 
 
 
             </script>
-        </div>
+        </div>  
     </body>
 </html>
