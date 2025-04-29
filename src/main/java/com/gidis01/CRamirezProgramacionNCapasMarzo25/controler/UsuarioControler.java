@@ -82,7 +82,7 @@ public class UsuarioControler {
     @GetMapping
     public String Index(Model model) {
         usuarioDAOImplementation.GetAllJPA();
-         Result resultJPA = usuarioDAOImplementation.GetAllJPA();
+        Result resultJPA = usuarioDAOImplementation.GetAllJPA();
 //        Result result = usuarioDAOImplementation.GetAll();
         model.addAttribute("listaUsuarios", resultJPA.objects);
         System.out.println("Usuarios encontrados: " + resultJPA.objects);
@@ -93,7 +93,8 @@ public class UsuarioControler {
 
     @GetMapping("/Form/{IdUsuario}")
     public String Form(@PathVariable int IdUsuario, Model model) {
-        Result resultPais = paisDAOImplementation.PaisGetAll();
+        Result resultPais = paisDAOImplementation.PaisGetAll(); //aqui
+//        Result resultPais = paisDAOImplementation.PaisGetAllJPA(); //aqui
         model.addAttribute("listaPais", resultPais.objects); // ✅ aquí agregamos los países
 
         Result result = new Result();
@@ -118,33 +119,60 @@ public class UsuarioControler {
     }
 
     @GetMapping("/formEditable")
-    public String FormEditable(Model model, @RequestParam int IdUsuario, @RequestParam(required = false) Integer IdDireccion) {
-        if (IdDireccion == null) {
-            UsuarioDireccion usuarioDireccion = new UsuarioDireccion();
-            usuarioDireccion = (UsuarioDireccion) usuarioDAOImplementation.GetById(IdUsuario).object;
-            usuarioDireccion.direccion = new Direccion();
-            usuarioDireccion.direccion.setIdDireccion(-1);
-            model.addAttribute("usuarioDireccion", usuarioDireccion);
-        } else if (IdDireccion == 0) {
-            //Agregar Direccion
-            UsuarioDireccion usuarioDireccion = new UsuarioDireccion();
-            usuarioDireccion.usuario = new Usuario();
-            usuarioDireccion.usuario.setIdUsuario(IdUsuario);
-            usuarioDireccion.direccion = new Direccion();
+    public String FormEditable(Model model, @RequestParam int IdUsuario, @RequestParam(required = false, defaultValue = "-1") int IdDireccion) {
+
+        System.out.println("DEBUG - IdUsuario: " + IdUsuario + ", IdDireccion: " + IdDireccion);
+
+        UsuarioDireccion usuarioDireccion = new UsuarioDireccion();
+        usuarioDireccion.usuario = new Usuario();
+        usuarioDireccion.usuario.setIdUsuario(IdUsuario);
+        usuarioDireccion.direccion = new Direccion();
+
+        if (IdDireccion == 0) {
+            // MODO AGREGAR NUEVA DIRECCIÓN
+            System.out.println("MODO AGREGAR DIRECCIÓN");
             usuarioDireccion.direccion.setIdDireccion(0);
-            model.addAttribute("usuarioDireccion", usuarioDireccion);
-            model.addAttribute("usuarioDireccion", direccionDAOImplementation.GetByIdDireccion(0).correct ? direccionDAOImplementation.GetByIdDireccion(0).object : null);
-            model.addAttribute("paises", paisDAOImplementation.PaisGetAll().correct ? paisDAOImplementation.PaisGetAll().object : null);
-        } else { //Editar dirección
-            UsuarioDireccion usuarioDireccion = new UsuarioDireccion();
-            usuarioDireccion.usuario = new Usuario();
-            usuarioDireccion.usuario.setIdUsuario(IdUsuario);
-            usuarioDireccion.direccion = new Direccion();
-            usuarioDireccion.direccion.setIdDireccion(IdDireccion);
+
+            // Cargar lista de países
+            model.addAttribute("paises", paisDAOImplementation.PaisGetAll().object);
+
+        } else if (IdDireccion > 0) {
+            // MODO EDITAR DIRECCIÓN EXISTENTE
+            System.out.println("MODO EDITAR DIRECCIÓN");
             usuarioDireccion.direccion = (Direccion) direccionDAOImplementation.GetByIdDireccion(IdDireccion).object;
-            model.addAttribute("usuarioDireccion", usuarioDireccion);
-            model.addAttribute("estados", estadoDAOImplementation.GetAll(0).correct ? estadoDAOImplementation.GetAll(0).objects : null);
+
+            // Verificar que la dirección tenga colonia y relaciones completas
+            if (usuarioDireccion.direccion.getColonia() != null
+                    && usuarioDireccion.direccion.getColonia().getMunicipio() != null
+                    && usuarioDireccion.direccion.getColonia().getMunicipio().getEstado() != null) {
+
+                // Obtener ID del país actual
+                int idPaisActual = usuarioDireccion.direccion.getColonia().getMunicipio().getEstado().getPais().getIdPais();
+
+                // Cargar datos para combobox
+                model.addAttribute("paises", paisDAOImplementation.PaisGetAll().correct ? paisDAOImplementation.PaisGetAll().objects : null);
+                model.addAttribute("estados", estadoDAOImplementation.GetAll(idPaisActual).objects);
+                model.addAttribute("municipios", municipioDAOImplementation.MunicipioGetAll(
+                        usuarioDireccion.direccion.getColonia().getMunicipio().getEstado().getIdEstado()).objects);
+                model.addAttribute("colonias", coloniaDAOImplementation.ColoniaGetAll(
+                        usuarioDireccion.direccion.getColonia().getMunicipio().getIdMunicipio()).objects);
+
+                System.out.println("Datos cargados para edición - País: " + idPaisActual);
+            } else {
+                System.out.println("Advertencia: La dirección no tiene relaciones completas");
+                model.addAttribute("paises", paisDAOImplementation.PaisGetAll().object);
+                model.addAttribute("estados", new ArrayList<Estado>());
+                model.addAttribute("municipios", new ArrayList<Municipio>());
+                model.addAttribute("colonias", new ArrayList<Colonia>());
+            }
+        } else {
+            // MODO SIN DIRECCIÓN ESPECÍFICA (SOLO USUARIO)
+            System.out.println("MODO SIN DIRECCIÓN ESPECÍFICA");
+            usuarioDireccion.direccion.setIdDireccion(-1);
+            model.addAttribute("paises", paisDAOImplementation.PaisGetAll().object);
         }
+
+        model.addAttribute("usuarioDireccion", usuarioDireccion);
         return "FormularioIndex";
     }
 
@@ -165,7 +193,8 @@ public class UsuarioControler {
             //Logica para consumir DAO para agregar un nuevo usuario
             System.out.println("Estoy agregando un nuevo usuario y direccion");
             usuarioDireccion.usuario.setFechaNacimiento(new Date());
-            usuarioDAOImplementation.Add(usuarioDireccion);
+//            usuarioDAOImplementation.Add(usuarioDireccion);
+            usuarioDAOImplementation.AddJPA(usuarioDireccion);
         } else {
             if (usuarioDireccion.direccion.getIdDireccion() == -1) { //Editar usuario
                 usuarioDAOImplementation.Update(usuarioDireccion.usuario);
@@ -290,7 +319,6 @@ public class UsuarioControler {
             usuario.setStatus(status);
 
             result = usuarioDAOImplementation.UpdateStatus(usuario);
-            
 
         } catch (Exception ex) {
             result.setSuccess(false);
@@ -298,6 +326,12 @@ public class UsuarioControler {
         }
 
         return result;
+    }
+
+    @GetMapping("Delete")
+    public String Delete(@RequestParam int IdDireccion) {
+        direccionDAOImplementation.DireccionDeleteJPA(IdDireccion);
+        return "redirect:/Usuario";
     }
 
     private List<UsuarioDireccion> leerArchivo(String filePath) throws Exception {

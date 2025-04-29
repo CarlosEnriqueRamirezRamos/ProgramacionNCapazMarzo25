@@ -6,4 +6,5 @@ public interface IDireccionDAO {
 
     Result GetByIdDireccion(int IdDireccion);
     Result GetById(int IdDireccion);
+    Result DireccionDeleteJPA(int IdDireccion);
 }

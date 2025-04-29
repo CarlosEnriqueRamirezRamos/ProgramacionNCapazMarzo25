@@ -11,6 +11,7 @@ import com.gidis01.CRamirezProgramacionNCapasMarzo25.ML.Result;
 import com.gidis01.CRamirezProgramacionNCapasMarzo25.ML.Rol;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import java.sql.ResultSet;
 import java.sql.Types;
 import java.util.ArrayList;
@@ -155,7 +156,7 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
                     direccion.setNumeroInterior(direccionJPA.getNumeroInterior());
                     direccion.Colonia = new Colonia();
                     direccion.Colonia.setIdColonia(direccionJPA.Colonia.getIdColonia());
-                    
+
                     usuarioDireccion.direcciones.add(direccion);
                 }
                 result.objects.add(usuarioDireccion);
@@ -169,15 +170,58 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
         }
         return result;
     }
+
+    
+    @Transactional //La transaccion no estaba activa porque faltaba eso!!
+    @Override
+    public Result AddJPA(UsuarioDireccion usuarioDireccion) {
+        Result result = new Result();
+        try {
+            com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Usuario usuarioJPA =
+                    new com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Usuario();
+            //Insercion de Usuario
+            usuarioJPA.setUsername(usuarioDireccion.usuario.getUserName());
+            usuarioJPA.setNombre(usuarioDireccion.usuario.getNombre());
+            usuarioJPA.setApellidoPaterno(usuarioDireccion.usuario.getApellidoPaterno());
+            usuarioJPA.setApellidoMaterno(usuarioDireccion.usuario.getApellidoMaterno());
+            usuarioJPA.setTelfono(usuarioDireccion.usuario.getTelefono());
+            usuarioJPA.Rol = new com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Rol();
+            usuarioJPA.Rol.setIdRol(usuarioDireccion.usuario.Rol.getIdRol());
+            usuarioJPA.setEmail(usuarioDireccion.usuario.getEmail());
+            usuarioJPA.setPassword(usuarioDireccion.usuario.getPassword());
+            usuarioJPA.setFechaNacimiento(usuarioDireccion.usuario.getFechaNacimiento());
+            usuarioJPA.setCurp(usuarioDireccion.usuario.getCurp());
+            usuarioJPA.setCelular(usuarioDireccion.usuario.getCelular());
+            usuarioJPA.setSexo(usuarioDireccion.usuario.getSexo());
+            usuarioJPA.setImagen(usuarioDireccion.usuario.getImagen());
+            usuarioJPA.setStatus(usuarioDireccion.usuario.getStatus());
+            EntityManager.persist(usuarioJPA);
+            
+            //insercion de Direccion
+            com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Direccion direccionJPA
+                    = new com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Direccion();
+            direccionJPA.setCalle(usuarioDireccion.direccion.getCalle());
+            direccionJPA.setNumeroInterior(usuarioDireccion.direccion.getNumeroInterior());
+            direccionJPA.setNumeroExterior(usuarioDireccion.direccion.getNumeroExterior());
+            direccionJPA.Colonia = new com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Colonia();
+            direccionJPA.Colonia.setIdColonia(usuarioDireccion.direccion.Colonia.getIdColonia());
+            direccionJPA.Usuario = usuarioJPA;
+            EntityManager.persist(direccionJPA);
+            
+            result.correct = true;
+
+        } catch (Exception ex) {
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+        return result;
+    }
     
     @Override
-    public Result AddJPA(){
+    public Result DeleteJPA(){
         Result result = new Result();
-        try{
         
-    }catch(Exception ex){
-        
-    }
         return result;
     }
 

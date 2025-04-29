@@ -1,10 +1,11 @@
 
 package com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA;
 
-import com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Rol;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
@@ -15,7 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 public class Usuario {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idusuario")
     private int IdUsuario;
     
@@ -30,7 +31,7 @@ public class Usuario {
     
     @JoinColumn(name = "idroll")
     @ManyToOne
-    private Rol Rol;
+    public Rol Rol;
     
     @Column(name = "username")
      private String Username;
