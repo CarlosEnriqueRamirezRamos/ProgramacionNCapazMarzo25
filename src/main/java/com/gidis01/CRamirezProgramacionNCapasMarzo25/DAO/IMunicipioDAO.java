@@ -5,4 +5,5 @@ import com.gidis01.CRamirezProgramacionNCapasMarzo25.ML.Result;
 
 public interface IMunicipioDAO {
     Result MunicipioGetAll(int IdEstado);
+    Result MunicipioGetAllJPA(int IdEstado);
 }

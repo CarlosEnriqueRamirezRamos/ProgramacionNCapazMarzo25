@@ -16,14 +16,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ColoniaDAOImplementation implements IColoniaDAO {
 
-    
- 
+    @Autowired //Inyección dependencias (field, contructor, setter)
+    public JdbcTemplate jdbcTemplate; // conexión directa
 
-    @Autowired
-    private EntityManager entityManager;
-    
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    @Autowired //Conexion de JPA
+    private EntityManager EntityManager;
 
     @Override
     public Result ColoniaGetAll(int IdMunicipio) {
@@ -56,14 +53,47 @@ public class ColoniaDAOImplementation implements IColoniaDAO {
         }
         return result;
     }
-    
+
     @Override
-    public Result ColoniaByIdMunicipioJPA(int IdMunicipio){
+    public Result ColoniaGetAllJPA(int IdMunicipio) {
+        Result result = new Result();
+        try {
+            // Consulta JPA para obtener colonias por municipio
+            TypedQuery<com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Colonia> query
+                    = EntityManager.createQuery(
+                            "FROM Colonia WHERE Municipio.IdMunicipio = :idMunicipio",
+                            com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Colonia.class);
+            query.setParameter("idMunicipio", IdMunicipio);
+
+            List<com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Colonia> coloniasJPA = query.getResultList();
+
+            result.objects = new ArrayList<>();
+            for (com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Colonia coloniaJPA : coloniasJPA) {
+                Colonia colonia = new Colonia();
+                colonia.setIdColonia(coloniaJPA.getIdColonia());
+                colonia.setNombre(coloniaJPA.getNombre());
+                colonia.setCodigoPostal(coloniaJPA.getCodigoPostal());
+                result.objects.add(colonia);
+            }
+
+            result.correct = true;
+
+        } catch (Exception ex) {
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+            result.objects = null;
+        }
+        return result;
+    }
+
+    @Override
+    public Result ColoniaByIdMunicipioJPA(int IdMunicipio) {
         com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Colonia coloniaJPA = new com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Colonia();
-        TypedQuery<com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Colonia> queryColonia = entityManager.createQuery("FROM Colonia WHERE Municipio.IdMunicipio",
+        TypedQuery<com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Colonia> queryColonia = EntityManager.createQuery("FROM Colonia WHERE Municipio.IdMunicipio",
                 com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Colonia.class);
-        List<com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Colonia> coloniasJPA =queryColonia.getResultList();
-        coloniaJPA =  entityManager.find(com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Colonia.class, IdMunicipio);
+        List<com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Colonia> coloniasJPA = queryColonia.getResultList();
+        coloniaJPA = EntityManager.find(com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Colonia.class, IdMunicipio);
         return null;
     }
 }

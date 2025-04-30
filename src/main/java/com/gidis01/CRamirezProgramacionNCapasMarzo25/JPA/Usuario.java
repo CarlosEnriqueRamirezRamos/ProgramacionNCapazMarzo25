@@ -47,7 +47,7 @@ public class Usuario {
      private Date FechaNacimiento;
      
      @Column(name = "telefono")
-     private String Telfono;
+     private String Telefono;
 
      @Column(name = "curp")
      private String Curp;
@@ -149,12 +149,12 @@ public class Usuario {
         this.FechaNacimiento = FechaNacimiento;
     }
 
-    public String getTelfono() {
-        return Telfono;
+    public String getTelefono() {
+        return Telefono;
     }
 
-    public void setTelfono(String Telfono) {
-        this.Telfono = Telfono;
+    public void setTelefono(String Telefono) {
+        this.Telefono = Telefono;
     }
 
     public String getCurp() {
