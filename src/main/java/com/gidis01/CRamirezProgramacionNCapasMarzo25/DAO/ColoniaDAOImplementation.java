@@ -90,8 +90,10 @@ public class ColoniaDAOImplementation implements IColoniaDAO {
     @Override
     public Result ColoniaByIdMunicipioJPA(int IdMunicipio) {
         com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Colonia coloniaJPA = new com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Colonia();
-        TypedQuery<com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Colonia> queryColonia = EntityManager.createQuery("FROM Colonia WHERE Municipio.IdMunicipio",
+        TypedQuery<com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Colonia> queryColonia = 
+                EntityManager.createQuery("FROM Colonia WHERE Municipio.IdMunicipio",
                 com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Colonia.class);
+        
         List<com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Colonia> coloniasJPA = queryColonia.getResultList();
         coloniaJPA = EntityManager.find(com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Colonia.class, IdMunicipio);
         return null;
