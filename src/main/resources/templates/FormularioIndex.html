@@ -2,515 +2,526 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
-<head>
-    <title>Formulario de Usuario</title>
-    
-    <!-- Estilos específicos del formulario -->
-    <style>
-        :root {
-            --primary-color: #4a6bff;
-            --primary-light: #6a8cff;
-            --primary-dark: #2a4bdf;
-            --secondary-color: #03dac6;
-            --background-dark: #1e293b;
-            --surface-dark: #2c3e50;
-            --surface-light: #3a4b5d;
-            --text-primary: #ffffff;
-            --text-secondary: #cbd5e1;
-        }
+    <head>
+        <title>Formulario de Usuario</title>
 
-        .container {
-            max-width: 1200px;
-            padding: 2rem;
-        }
+        <!-- Estilos específicos del formulario -->
+        <style>
+            :root {
+                --primary-color: #4a6bff;
+                --primary-light: #6a8cff;
+                --primary-dark: #2a4bdf;
+                --secondary-color: #03dac6;
+                --background-dark: #1e293b;
+                --surface-dark: #2c3e50;
+                --surface-light: #3a4b5d;
+                --text-primary: #ffffff;
+                --text-secondary: #cbd5e1;
+            }
 
-        .card-main {
-            background-color: var(--surface-dark);
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            overflow: hidden;
-        }
-
-        .card-main:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
-        }
-
-        .card-header {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
-            border-bottom: none;
-            padding: 1.5rem;
-            color: white;
-            text-align: center;
-        }
-
-        .card-header h2 {
-            margin: 0;
-            font-weight: 600;
-        }
-
-        .section-card {
-            background-color: var(--surface-light);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-left: 4px solid var(--primary-color);
-        }
-
-        .section-title {
-            color: var(--secondary-color);
-            font-weight: 500;
-            margin-bottom: 1.5rem;
-            position: relative;
-            padding-left: 15px;
-            font-size: 1.2rem;
-        }
-
-        .section-title:before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            height: 70%;
-            width: 4px;
-            background: var(--primary-color);
-            border-radius: 2px;
-        }
-
-        .form-control, .form-select {
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: var(--text-primary);
-            border-radius: 6px;
-            padding: 10px 15px;
-            transition: all 0.3s;
-        }
-
-        .form-control:focus, .form-select:focus {
-            background-color: rgba(255, 255, 255, 0.15);
-            border-color: var(--primary-light);
-            box-shadow: 0 0 0 0.25rem rgba(74, 107, 255, 0.25);
-            color: var(--text-primary);
-        }
-
-        .form-label {
-            color: var(--text-secondary);
-            font-weight: 400;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-        }
-
-        .input-group-text {
-            background-color: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: var(--text-secondary);
-        }
-
-        .btn-submit {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
-            border: none;
-            border-radius: 30px;
-            padding: 12px 30px;
-            font-weight: 500;
-            color: white;
-            letter-spacing: 0.5px;
-            transition: all 0.3s;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            text-transform: uppercase;
-            font-size: 0.9rem;
-        }
-
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(74, 107, 255, 0.4);
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
-        }
-
-        #previewImage {
-            width: 100%;
-            max-width: 200px;
-            height: auto;
-            border-radius: 8px;
-            border: 2px solid var(--primary-color);
-            transition: all 0.3s;
-            cursor: pointer;
-            object-fit: cover;
-            aspect-ratio: 1/1;
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        #previewImage:hover {
-            transform: scale(1.03);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .image-upload-container {
-            position: relative;
-            overflow: hidden;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 1px dashed rgba(255, 255, 255, 0.2);
-            text-align: center;
-        }
-
-        .image-upload-container label {
-            width: 100%;
-            color: var(--text-secondary);
-            font-weight: 500;
-            margin-bottom: 1rem;
-        }
-
-        .floating-label {
-            position: relative;
-            margin-bottom: 1.5rem;
-        }
-
-        .floating-label .form-control {
-            padding-top: 1.8rem;
-            padding-bottom: 0.8rem;
-        }
-
-        .floating-label label {
-            position: absolute;
-            top: 0.65rem;
-            left: 1rem;
-            color: var(--text-secondary);
-            transition: all 0.2s;
-            pointer-events: none;
-            font-size: 0.85rem;
-        }
-
-        .floating-label .form-control:focus ~ label,
-        .floating-label .form-control:not(:placeholder-shown) ~ label {
-            top: 0.2rem;
-            left: 0.8rem;
-            font-size: 0.7rem;
-            color: var(--primary-light);
-        }
-
-        /* Estilos para la tabla de errores (si es necesario) */
-        .table-errors {
-            background-color: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(8px);
-            color: white;
-            border-collapse: separate;
-            border-spacing: 0;
-            border-radius: 8px;
-            overflow: hidden;
-            margin-top: 1.5rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .table-errors thead th {
-            background-color: rgba(0, 0, 0, 0.25);
-            color: white;
-            border-bottom: 2px solid var(--primary-color);
-            padding: 15px;
-        }
-
-        @media (max-width: 768px) {
             .container {
-                padding: 1rem;
+                max-width: 1200px;
+                padding: 2rem;
             }
-            
+
             .card-main {
+                background-color: var(--surface-dark);
+                border: none;
+                border-radius: 12px;
+                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                overflow: hidden;
+            }
+
+            .card-main:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+            }
+
+            .card-header {
+                background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+                border-bottom: none;
+                padding: 1.5rem;
+                color: white;
+                text-align: center;
+            }
+
+            .card-header h2 {
                 margin: 0;
-                border-radius: 0;
+                font-weight: 600;
             }
-            
+
             .section-card {
-                padding: 1rem;
+                background-color: var(--surface-light);
+                border-radius: 8px;
+                padding: 1.5rem;
+                margin-bottom: 1.5rem;
+                border-left: 4px solid var(--primary-color);
             }
-            
-            .floating-label {
+
+            .section-title {
+                color: var(--secondary-color);
+                font-weight: 500;
+                margin-bottom: 1.5rem;
+                position: relative;
+                padding-left: 15px;
+                font-size: 1.2rem;
+            }
+
+            .section-title:before {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                height: 70%;
+                width: 4px;
+                background: var(--primary-color);
+                border-radius: 2px;
+            }
+
+            .form-control, .form-select {
+                background-color: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                color: var(--text-primary);
+                border-radius: 6px;
+                padding: 10px 15px;
+                transition: all 0.3s;
+            }
+
+            .form-control:focus, .form-select:focus {
+                background-color: rgba(255, 255, 255, 0.15);
+                border-color: var(--primary-light);
+                box-shadow: 0 0 0 0.25rem rgba(74, 107, 255, 0.25);
+                color: var(--text-primary);
+            }
+
+            .form-label {
+                color: var(--text-secondary);
+                font-weight: 400;
+                margin-bottom: 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .input-group-text {
+                background-color: rgba(0, 0, 0, 0.2);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                color: var(--text-secondary);
+            }
+
+            .btn-submit {
+                background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+                border: none;
+                border-radius: 30px;
+                padding: 12px 30px;
+                font-weight: 500;
+                color: white;
+                letter-spacing: 0.5px;
+                transition: all 0.3s;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+                text-transform: uppercase;
+                font-size: 0.9rem;
+            }
+
+            .btn-submit:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 12px rgba(74, 107, 255, 0.4);
+                background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+            }
+
+            #previewImage {
+                width: 100%;
+                max-width: 200px;
+                height: auto;
+                border-radius: 8px;
+                border: 2px solid var(--primary-color);
+                transition: all 0.3s;
+                cursor: pointer;
+                object-fit: cover;
+                aspect-ratio: 1/1;
+                background-color: rgba(255, 255, 255, 0.1);
+            }
+
+            #previewImage:hover {
+                transform: scale(1.03);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            }
+
+            .image-upload-container {
+                position: relative;
+                overflow: hidden;
+                border-radius: 8px;
+                background: rgba(255, 255, 255, 0.05);
+                padding: 1rem;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                border: 1px dashed rgba(255, 255, 255, 0.2);
+                text-align: center;
+            }
+
+            .image-upload-container label {
+                width: 100%;
+                color: var(--text-secondary);
+                font-weight: 500;
                 margin-bottom: 1rem;
             }
-        }
-    </style>
-</head>
-<body>
-    <!-- Contenido principal -->
-    <div layout:fragment="content">
-        <div class="container py-4">
-            <div class="card card-main mx-auto">
-                <form th:action="@{/Usuario/Form}" method="post" th:object="${usuarioDireccion}" enctype="multipart/form-data">
-                    <input type="hidden" th:field="*{Usuario.IdUsuario}">
-                    <input type="hidden" th:field="*{Direccion.IdDireccion}">
 
-                    <div class="card-header">
-                        <h2><i class="bi bi-person-badge me-2"></i>Formulario de Usuario</h2>
-                    </div>
+            .floating-label {
+                position: relative;
+                margin-bottom: 1.5rem;
+            }
 
-                    <div class="card-body px-4 py-4">
-                        <div class="row g-4">
-                            <!-- Columna Datos Usuario -->
-                            <div class="col-md-8" th:if="${(usuarioDireccion.Usuario.IdUsuario == 0 && usuarioDireccion.Direccion.IdDireccion == 0) 
-                                 || (usuarioDireccion.Usuario.IdUsuario != 0 && usuarioDireccion.Direccion.IdDireccion == -1)}">
-                                <div class="row">
-                                    <!-- Imagen -->
-                                    <div class="col-md-4">
-                                        <div class="image-upload-container">
-                                            <label for="imagenFile">
-                                                <i class="bi bi-camera-fill fs-3 d-block mb-2"></i>
-                                                Foto de perfil
-                                            </label>
-                                            <input type="file" class="form-control d-none" name="imagenFile" id="imagenFile" accept="image/*">
-                                            <label for="imagenFile" class="w-100">
-                                                <img id="previewImage" class="img-fluid" 
-                                                     th:src="${usuarioDireccion.Usuario.Imagen != null} ? 
-                                                     'data:image/png;base64,' + ${usuarioDireccion.Usuario.Imagen} 
-                                                     : 'https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png'" 
-                                                     alt="Vista previa de la imagen"/>
-                                            </label>
-                                            <small class="text-muted mt-2">Haz clic para cambiar</small>
+            .floating-label .form-control {
+                padding-top: 1.8rem;
+                padding-bottom: 0.8rem;
+            }
+
+            .floating-label label {
+                position: absolute;
+                top: 0.65rem;
+                left: 1rem;
+                color: var(--text-secondary);
+                transition: all 0.2s;
+                pointer-events: none;
+                font-size: 0.85rem;
+            }
+
+            .floating-label .form-control:focus ~ label,
+            .floating-label .form-control:not(:placeholder-shown) ~ label {
+                top: 0.2rem;
+                left: 0.8rem;
+                font-size: 0.7rem;
+                color: var(--primary-light);
+            }
+
+            /* Estilos para la tabla de errores (si es necesario) */
+            .table-errors {
+                background-color: rgba(30, 41, 59, 0.7);
+                backdrop-filter: blur(8px);
+                color: white;
+                border-collapse: separate;
+                border-spacing: 0;
+                border-radius: 8px;
+                overflow: hidden;
+                margin-top: 1.5rem;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .table-errors thead th {
+                background-color: rgba(0, 0, 0, 0.25);
+                color: white;
+                border-bottom: 2px solid var(--primary-color);
+                padding: 15px;
+            }
+
+            @media (max-width: 768px) {
+                .container {
+                    padding: 1rem;
+                }
+
+                .card-main {
+                    margin: 0;
+                    border-radius: 0;
+                }
+
+                .section-card {
+                    padding: 1rem;
+                }
+
+                .floating-label {
+                    margin-bottom: 1rem;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Contenido principal -->
+        <div layout:fragment="content">
+            <div class="container py-4">
+                <div class="card card-main mx-auto">
+                    <form th:action="@{/Usuario/Form}" method="post" th:object="${usuarioDireccion}" enctype="multipart/form-data">
+                        <input type="hidden" th:field="*{Usuario.IdUsuario}">
+                        <input type="hidden" th:field="*{Direccion.IdDireccion}">
+
+                        <div class="card-header">
+                            <h2><i class="bi bi-person-badge me-2"></i>Formulario de Usuario</h2>
+                        </div>
+
+                        <div class="card-body px-4 py-4">
+                            <div class="row g-4">
+                                <!-- Columna Datos Usuario -->
+                                <div class="col-md-8" th:if="${(usuarioDireccion.Usuario.IdUsuario == 0 && usuarioDireccion.Direccion.IdDireccion == 0) 
+                                     || (usuarioDireccion.Usuario.IdUsuario != 0 && usuarioDireccion.Direccion.IdDireccion == -1)}">
+                                    <div class="row">
+                                        <!-- Imagen -->
+                                        <div class="col-md-4">
+                                            <div class="image-upload-container">
+                                                <label for="imagenFile">
+                                                    <i class="bi bi-camera-fill fs-3 d-block mb-2"></i>
+                                                    Foto de perfil
+                                                </label>
+                                                <input type="file" class="form-control d-none" name="imagenFile" id="imagenFile" accept="image/*">
+                                                <label for="imagenFile" class="w-100">
+                                                    <img id="previewImage" class="img-fluid" 
+                                                         th:src="${usuarioDireccion.Usuario.Imagen != null} ? 
+                                                         'data:image/png;base64,' + ${usuarioDireccion.Usuario.Imagen} 
+                                                         : 'https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png'" 
+                                                         alt="Vista previa de la imagen"/>
+                                                </label>
+                                                <small class="text-muted mt-2">Haz clic para cambiar</small>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <!-- Datos del Usuario -->
-                                    <div class="col-md-8">
-                                        <div class="section-card h-100">
-                                            <h5 class="section-title">Datos personales</h5>
-                                            <div class="row g-3">
-                                                <div class="col-md-6 floating-label">
-                                                    <input type="text" class="form-control" th:field="*{Usuario.UserName}" placeholder=" " required>
-                                                    <label><i class="bi bi-person me-2"></i>Nombre de usuario</label>
-                                                </div>
-                                                <div class="col-md-6 floating-label">
-                                                    <input type="text" class="form-control" th:field="*{Usuario.Nombre}" placeholder=" " required>
-                                                    <label>Nombre</label>
-                                                </div>
-                                                <div class="col-md-6 floating-label">
-                                                    <input type="text" class="form-control" th:field="*{Usuario.ApellidoPaterno}" placeholder=" " required>
-                                                    <label>Apellido paterno</label>
-                                                </div>
-                                                <div class="col-md-6 floating-label">
-                                                    <input type="text" class="form-control" th:field="*{Usuario.ApellidoMaterno}" placeholder=" " required>
-                                                    <label>Apellido materno</label>
-                                                </div>
-                                                <div class="col-md-6 floating-label">
-                                                    <input type="email" class="form-control" th:field="*{Usuario.Email}" placeholder=" " required>
-                                                    <label><i class="bi bi-envelope me-2"></i>Correo electrónico</label>
-                                                </div>
-                                                <div class="col-md-3 floating-label">
-                                                    <input type="text" class="form-control" th:field="*{Usuario.Telefono}" placeholder=" " required>
-                                                    <label><i class="bi bi-telephone me-2"></i>Teléfono</label>
-                                                </div>
-                                                <div class="col-md-3 floating-label">
-                                                    <input type="text" class="form-control" th:field="*{Usuario.Celular}" placeholder=" " required>
-                                                    <label><i class="bi bi-phone me-2"></i>Celular</label>
-                                                </div>
-                                                <div class="col-md-6 floating-label">
-                                                    <input type="date" class="form-control" th:field="*{Usuario.FechaNacimiento}">
-                                                    <label>Fecha de nacimiento</label>
-                                                </div>
-                                                <div class="col-md-6 floating-label">
-                                                    <input type="text" class="form-control" th:field="*{Usuario.Curp}" placeholder=" ">
-                                                    <label>CURP</label>
-                                                </div>
-                                                <div class="col-md-6 floating-label">
-                                                    <select class="form-select" th:field="*{Usuario.Sexo}">
-                                                        <option value=""></option>
-                                                        <option value="M">Masculino</option>
-                                                        <option value="F">Femenino</option>
-                                                    </select>
-                                                    <label>Sexo</label>
-                                                </div>
-                                                <div class="col-md-3 floating-label">
-                                                    <input type="text" class="form-control" th:field="*{Usuario.Rol.IdRol}" placeholder=" ">
-                                                    <label>ID Rol</label>
-                                                </div>
-                                                <div class="col-md-3 floating-label">
-                                                    <input type="text" class="form-control" th:field="*{Usuario.Password}" placeholder=" ">
-                                                    <label><i class="bi bi-lock me-2"></i>Contraseña</label>
+                                        <!-- Datos del Usuario -->
+                                        <div class="col-md-8">
+                                            <div class="section-card h-100">
+                                                <h5 class="section-title">Datos personales</h5>
+                                                <div class="row g-3">
+                                                    <div class="col-md-6 floating-label">
+                                                        <input type="text" class="form-control" th:field="*{Usuario.UserName}" placeholder=" " required>
+                                                        <label><i class="bi bi-person me-2"></i>Nombre de usuario</label>
+                                                    </div>
+                                                    <div class="col-md-6 floating-label">
+                                                        <input type="text" class="form-control" th:field="*{Usuario.Nombre}" placeholder=" " required>
+                                                        <label>Nombre</label>
+                                                    </div>
+                                                    <div class="col-md-6 floating-label">
+                                                        <input type="text" class="form-control" th:field="*{Usuario.ApellidoPaterno}" placeholder=" " required>
+                                                        <label>Apellido paterno</label>
+                                                    </div>
+                                                    <div class="col-md-6 floating-label">
+                                                        <input type="text" class="form-control" th:field="*{Usuario.ApellidoMaterno}" placeholder=" " required>
+                                                        <label>Apellido materno</label>
+                                                    </div>
+                                                    <div class="col-md-6 floating-label">
+                                                        <input type="email" class="form-control" th:field="*{Usuario.Email}" placeholder=" " required>
+                                                        <label><i class="bi bi-envelope me-2"></i>Correo electrónico</label>
+                                                    </div>
+                                                    <div class="col-md-3 floating-label">
+                                                        <input type="text" class="form-control" th:field="*{Usuario.Telefono}" placeholder=" " required>
+                                                        <label><i class="bi bi-telephone me-2"></i>Teléfono</label>
+                                                    </div>
+                                                    <div class="col-md-3 floating-label">
+                                                        <input type="text" class="form-control" th:field="*{Usuario.Celular}" placeholder=" " required>
+                                                        <label><i class="bi bi-phone me-2"></i>Celular</label>
+                                                    </div>
+                                                    <div class="col-md-6 floating-label">
+                                                        <input type="date" class="form-control" th:field="*{Usuario.FechaNacimiento}">
+                                                        <label>Fecha de nacimiento</label>
+                                                    </div>
+                                                    <div class="col-md-6 floating-label">
+                                                        <input type="text" class="form-control" th:field="*{Usuario.Curp}" placeholder=" ">
+                                                        <label>CURP</label>
+                                                    </div>
+                                                    <div class="col-md-6 floating-label">
+                                                        <select class="form-select" th:field="*{Usuario.Sexo}">
+                                                            <option value=""></option>
+                                                            <option value="M">Masculino</option>
+                                                            <option value="F">Femenino</option>
+                                                        </select>
+                                                        <label>Sexo</label>
+                                                    </div>
+                                                    <div class="col-md-3 floating-label">
+                                                        <input type="text" class="form-control" th:field="*{Usuario.Rol.IdRol}" placeholder=" ">
+                                                        <label>ID Rol</label>
+                                                    </div>
+                                                    <div class="col-md-3 floating-label">
+                                                        <input type="text" class="form-control" th:field="*{Usuario.Password}" placeholder=" ">
+                                                        <label><i class="bi bi-lock me-2"></i>Contraseña</label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Columna Datos Domicilio -->
-                            <div class="col-12" th:if="${(usuarioDireccion.Usuario.IdUsuario != 0 && usuarioDireccion.Direccion.IdDireccion > 0) 
-                                 || (usuarioDireccion.Usuario.IdUsuario != 0 && usuarioDireccion.Direccion.IdDireccion == 0)
-                                 || (usuarioDireccion.Usuario.IdUsuario == 0 && usuarioDireccion.Direccion.IdDireccion == 0)}">
-                                <div class="section-card">
-                                    <h5 class="section-title">Domicilio</h5>
-                                    <div class="row g-3">
-                                        <div class="col-md-6 floating-label">
-                                            <input type="text" class="form-control" th:field="*{Direccion.Calle}" placeholder=" ">
-                                            <label>Calle</label>
-                                        </div>
-                                        <div class="col-md-3 floating-label">
-                                            <input type="text" class="form-control" th:field="*{Direccion.NumeroInterior}" placeholder=" ">
-                                            <label>N° Interior</label>
-                                        </div>
-                                        <div class="col-md-3 floating-label">
-                                            <input type="text" class="form-control" th:field="*{Direccion.NumeroExterior}" placeholder=" ">
-                                            <label>N° Exterior</label>
-                                        </div>
-                                        <div class="col-md-4 floating-label">
-                                            <select id="paisddl" class="form-select" name="direccion.Colonia.Municipio.Estado.Pais.idPais" required>
-                                                <option value=""></option>
-                                                <th:block th:each="pais : ${listaPais}">
-                                                    <option th:value="${pais.idPais}" th:text="${pais.nombre}"></option>
-                                                </th:block>
-                                            </select>
-                                            <label>País</label>
-                                        </div>
-                                        <div class="col-md-4 floating-label">
-                                            <select id="estadoddl" class="form-select" th:field="*{Direccion.Colonia.Municipio.Estado.IdEstado}">
-                                                <option value="0"></option>
-                                            </select>
-                                            <label>Estado</label>
-                                        </div>
-                                        <div class="col-md-4 floating-label">
-                                            <select id="municipioddl" class="form-select" th:field="*{Direccion.Colonia.Municipio.IdMunicipio}">
-                                                <option value="0"></option>
-                                            </select>
-                                            <label>Municipio</label>
-                                        </div>
-                                        <div class="col-md-8 floating-label">
-                                            <select id="coloniaddl" class="form-select" th:field="*{Direccion.Colonia.IdColonia}">
-                                                <option value="0"></option>
-                                            </select>
-                                            <label>Colonia</label>
-                                        </div>
-                                        <div class="col-md-4 floating-label">
-                                            <input type="text" id="codigoPostal" class="form-control" th:field="*{Direccion.Colonia.CodigoPostal}" readonly>
-                                            <label>Código Postal</label>
+                                <!-- Columna Datos Domicilio -->
+                                <div class="col-12" th:if="${(usuarioDireccion.Usuario.IdUsuario != 0 && usuarioDireccion.Direccion.IdDireccion > 0) 
+                                     || (usuarioDireccion.Usuario.IdUsuario != 0 && usuarioDireccion.Direccion.IdDireccion == 0)
+                                     || (usuarioDireccion.Usuario.IdUsuario == 0 && usuarioDireccion.Direccion.IdDireccion == 0)}">
+                                    <div class="section-card">
+                                        <h5 class="section-title">Domicilio</h5>
+                                        <div class="row g-3">
+                                            <div class="col-md-6 floating-label">
+                                                <input type="text" class="form-control" th:field="*{Direccion.Calle}" placeholder=" ">
+                                                <label>Calle</label>
+                                            </div>
+                                            <div class="col-md-3 floating-label">
+                                                <input type="text" class="form-control" th:field="*{Direccion.NumeroInterior}" placeholder=" ">
+                                                <label>N° Interior</label>
+                                            </div>
+                                            <div class="col-md-3 floating-label">
+                                                <input type="text" class="form-control" th:field="*{Direccion.NumeroExterior}" placeholder=" ">
+                                                <label>N° Exterior</label>
+                                            </div>
+                                            <div class="col-md-4 floating-label">
+                                                <select id="paisddl" class="form-select" name="direccion.Colonia.Municipio.Estado.Pais.idPais" required>
+                                                    <option value=""></option>
+                                                    <th:block th:each="pais : ${listaPais}">
+                                                        <option th:value="${pais.idPais}" th:text="${pais.nombre}"></option>
+                                                    </th:block>
+                                                </select>
+                                                <label>País</label>
+                                            </div>
+                                            <div class="col-md-4 floating-label">
+                                                <select id="estadoddl" class="form-select" th:field="*{Direccion.Colonia.Municipio.Estado.IdEstado}">
+                                                    <option value="0"></option>
+                                                </select>
+                                                <label>Estado</label>
+                                            </div>
+                                            <div class="col-md-4 floating-label">
+                                                <select id="municipioddl" class="form-select" th:field="*{Direccion.Colonia.Municipio.IdMunicipio}">
+                                                    <option value="0"></option>
+                                                </select>
+                                                <label>Municipio</label>
+                                            </div>
+                                            <div class="col-md-8 floating-label">
+                                                <select id="coloniaddl" class="form-select" th:field="*{Direccion.Colonia.IdColonia}">
+                                                    <option value="0"></option>
+                                                </select>
+                                                <label>Colonia</label>
+                                            </div>
+                                            <div class="col-md-4 floating-label">
+                                                <input type="text" id="codigoPostal" class="form-control" th:field="*{Direccion.Colonia.CodigoPostal}" readonly>
+                                                <label>Código Postal</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Botón Guardar -->
-                            <div class="col-12 text-center">
-                                <button type="submit" class="btn btn-submit">
-                                    <i class="bi bi-save-fill me-2"></i>Guardar Usuario
-                                </button>
+                                <!-- Botón Guardar -->
+                                <div class="col-12 text-center">
+                                    <button type="submit" class="btn btn-submit">
+                                        <i class="bi bi-save-fill me-2"></i>Guardar Usuario
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Scripts específicos del formulario -->
+        <!-- Scripts específicos del formulario -->
     <th:block layout:fragment="scripts">
         <script>
-            // Vista previa de la imagen
-            document.getElementById('imagenFile').addEventListener('change', function (e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function (event) {
-                        document.getElementById('previewImage').src = event.target.result;
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
+            document.addEventListener("DOMContentLoaded", function () {
+                // Vista previa de la imagen
+                const imagenInput = document.getElementById('imagenFile');
+                const previewImage = document.getElementById('previewImage');
 
-            // Click en la imagen para abrir el selector de archivos
-            document.getElementById('previewImage').addEventListener('click', function () {
-                document.getElementById('imagenFile').click();
-            });
-
-            // Validaciones de cascada para dirección
-            $("#paisddl").change(function () {
-                let idPais = $(this).val();
-                if (idPais != "") {
-                    $.ajax({
-                        type: "GET",
-                        url: "/Usuario/EstadoGetAll/" + idPais,
-                        dataType: "json",
-                        beforeSend: function () {
-                            $("#estadoddl").prop('disabled', true).addClass('loading');
-                        },
-                        success: function (data) {
-                            $("#estadoddl").empty().append('<option value="">Selecciona un estado</option>');
-                            $("#municipioddl").empty().append('<option value="">Selecciona un municipio</option>');
-                            $("#coloniaddl").empty().append('<option value="">Selecciona una colonia</option>');
-                            $.each(data.objects, function (i, estado) {
-                                $("#estadoddl").append('<option value="' + estado.idEstado + '">' + estado.nombre + '</option>');
-                            });
-                        },
-                        complete: function () {
-                            $("#estadoddl").prop('disabled', false).removeClass('loading');
-                        },
-                        error: function () {
-                            alert("Error al cargar estados.");
+                if (imagenInput) {
+                    imagenInput.addEventListener('change', function (e) {
+                        const file = e.target.files[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = function (event) {
+                                if (previewImage) {
+                                    previewImage.src = event.target.result;
+                                }
+                            };
+                            reader.readAsDataURL(file);
                         }
                     });
                 }
-            });
 
-            $("#estadoddl").change(function () {
-                let idEstado = $(this).val();
-                if (idEstado != "") {
-                    $.ajax({
-                        type: "GET",
-                        url: "/Usuario/MunicipioGetAll/" + idEstado,
-                        dataType: "json",
-                        beforeSend: function () {
-                            $("#municipioddl").prop('disabled', true).addClass('loading');
-                        },
-                        success: function (data) {
-                            $("#municipioddl").empty().append('<option value="">Selecciona un municipio</option>');
-                            $("#coloniaddl").empty().append('<option value="">Selecciona una colonia</option>');
-                            $.each(data.objects, function (i, municipio) {
-                                $("#municipioddl").append('<option value="' + municipio.idMunicipio + '">' + municipio.nombre + '</option>');
-                            });
-                        },
-                        complete: function () {
-                            $("#municipioddl").prop('disabled', false).removeClass('loading');
-                        },
-                        error: function () {
-                            alert("Error al cargar municipios.");
-                        }
+                // Click en la imagen para abrir el selector de archivos
+                if (previewImage && imagenInput) {
+                    previewImage.addEventListener('click', function () {
+                        imagenInput.click();
                     });
                 }
-            });
 
-            $("#municipioddl").change(function () {
-                let idMunicipio = $(this).val();
-                if (idMunicipio != "") {
-                    $.ajax({
-                        type: "GET",
-                        url: "/Usuario/ColoniaGetAll/" + idMunicipio,
-                        dataType: "json",
-                        beforeSend: function () {
-                            $("#coloniaddl").prop('disabled', true).addClass('loading');
-                        },
-                        success: function (data) {
-                            $("#coloniaddl").empty().append('<option value="">Selecciona una colonia</option>');
-                            $.each(data.objects, function (i, colonia) {
-                                $("#coloniaddl").append('<option value="' + colonia.idColonia + '" data-cp="' + colonia.codigoPostal + '">' + colonia.nombre + '</option>');
-                            });
-                        },
-                        complete: function () {
-                            $("#coloniaddl").prop('disabled', false).removeClass('loading');
-                        },
-                        error: function () {
-                            alert("Error al cargar colonias.");
-                        }
-                    });
-                }
-            });
+                // Validaciones de cascada para dirección
+                $("#paisddl").change(function () {
+                    let idPais = $(this).val();
+                    if (idPais !== "") {
+                        $.ajax({
+                            type: "GET",
+                            url: "/Usuario/EstadoGetAll/" + idPais,
+                            dataType: "json",
+                            beforeSend: function () {
+                                $("#estadoddl").prop('disabled', true).addClass('loading');
+                            },
+                            success: function (data) {
+                                $("#estadoddl").empty().append('<option value="">Selecciona un estado</option>');
+                                $("#municipioddl").empty().append('<option value="">Selecciona un municipio</option>');
+                                $("#coloniaddl").empty().append('<option value="">Selecciona una colonia</option>');
+                                $.each(data.objects, function (i, estado) {
+                                    $("#estadoddl").append('<option value="' + estado.idEstado + '">' + estado.nombre + '</option>');
+                                });
+                            },
+                            complete: function () {
+                                $("#estadoddl").prop('disabled', false).removeClass('loading');
+                            },
+                            error: function () {
+                                alert("Error al cargar estados.");
+                            }
+                        });
+                    }
+                });
 
-            $("#coloniaddl").change(function () {
-                let cp = $(this).find("option:selected").data("cp");
-                $("#codigoPostal").val(cp || '');
+                $("#estadoddl").change(function () {
+                    let idEstado = $(this).val();
+                    if (idEstado !== "") {
+                        $.ajax({
+                            type: "GET",
+                            url: "/Usuario/MunicipioGetAll/" + idEstado,
+                            dataType: "json",
+                            beforeSend: function () {
+                                $("#municipioddl").prop('disabled', true).addClass('loading');
+                            },
+                            success: function (data) {
+                                $("#municipioddl").empty().append('<option value="">Selecciona un municipio</option>');
+                                $("#coloniaddl").empty().append('<option value="">Selecciona una colonia</option>');
+                                $.each(data.objects, function (i, municipio) {
+                                    $("#municipioddl").append('<option value="' + municipio.idMunicipio + '">' + municipio.nombre + '</option>');
+                                });
+                            },
+                            complete: function () {
+                                $("#municipioddl").prop('disabled', false).removeClass('loading');
+                            },
+                            error: function () {
+                                alert("Error al cargar municipios.");
+                            }
+                        });
+                    }
+                });
+
+                $("#municipioddl").change(function () {
+                    let idMunicipio = $(this).val();
+                    if (idMunicipio !== "") {
+                        $.ajax({
+                            type: "GET",
+                            url: "/Usuario/ColoniaGetAll/" + idMunicipio,
+                            dataType: "json",
+                            beforeSend: function () {
+                                $("#coloniaddl").prop('disabled', true).addClass('loading');
+                            },
+                            success: function (data) {
+                                $("#coloniaddl").empty().append('<option value="">Selecciona una colonia</option>');
+                                $.each(data.objects, function (i, colonia) {
+                                    $("#coloniaddl").append('<option value="' + colonia.idColonia + '" data-cp="' + colonia.codigoPostal + '">' + colonia.nombre + '</option>');
+                                });
+                            },
+                            complete: function () {
+                                $("#coloniaddl").prop('disabled', false).removeClass('loading');
+                            },
+                            error: function () {
+                                alert("Error al cargar colonias.");
+                            }
+                        });
+                    }
+                });
+
+                $("#coloniaddl").change(function () {
+                    let cp = $(this).find("option:selected").data("cp");
+                    $("#codigoPostal").val(cp || '');
+                });
             });
-        </script>
+        </script>        
     </th:block>
 </body>
 </html>

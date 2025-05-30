@@ -1,136 +1,130 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
-    
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.2.4</version>
         <relativePath/>
     </parent>
-    
+
     <groupId>com.gidis01</groupId>
     <artifactId>CRamirezProgramacionNCapasMarzo25</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>CRamirezProgramacionNCapasMarzo25</name>
     <description>Demo project for Spring Boot</description>
-    
+
     <properties>
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        
-        <!-- Configuraciones para optimización -->
-        <spring.aot.enabled>true</spring.aot.enabled> <!-- Habilita compilación Ahead-of-Time -->
-        <spring.context.index>true</spring.context.index> <!-- Crea índice de componentes -->
-        <spring.jpa.open-in-view>false</spring.jpa.open-in-view> <!-- Mejor performance JPA -->
     </properties>
-    
+
     <dependencies>
-        <!-- Spring Boot Starters BÁSICOS (solo lo esencial) -->
+
+        <!-- Web + Undertow -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <exclusions>
-                <!-- Excluye Tomcat si prefieres Undertow (más rápido) -->
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-tomcat</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
-        
-        <!-- Usa Undertow en lugar de Tomcat (opcional, más rápido) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-undertow</artifactId>
         </dependency>
-        
+
+        <!-- Seguridad -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!-- Thymeleaf -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
         
         <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity6</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>nz.net.ultraq.thymeleaf</groupId>
+            <artifactId>thymeleaf-layout-dialect</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+
+        <!-- Validación -->
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
-        
+
+        <!-- JPA -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-        
-        <!-- Base de datos (mantén solo el driver que uses) -->
+
+        <!-- Oracle JDBC -->
         <dependency>
             <groupId>com.oracle.database.jdbc</groupId>
             <artifactId>ojdbc11</artifactId>
             <version>21.11.0.0</version>
             <scope>runtime</scope>
         </dependency>
-        
-        <!-- Thymeleaf Extras (solo si realmente los necesitas) -->
+
+        <!-- Apache POI -->
         <dependency>
-            <groupId>nz.net.ultraq.thymeleaf</groupId>
-            <artifactId>thymeleaf-layout-dialect</artifactId>
-            <version>3.3.0</version>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>5.2.5</version>
         </dependency>
-        
-        <!-- Desarrollo (solo para entorno dev) -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.2.5</version>
+        </dependency>
+
+        <!-- Lombok (solo en desarrollo) -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Devtools (solo en desarrollo) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
-        
-        <!-- Lombok (mantener como optional) -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        
-        <!-- Apache POI (solo si es necesario) -->
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi</artifactId>
-            <version>5.2.5</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>5.2.5</version>
-        </dependency>
+
+        <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-test</artifactId>
-            <version>3.4.4</version>
+            <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-            <type>jar</type>
         </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13</version>
-            <scope>test</scope>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.11.4</version>
-            <scope>test</scope>
-            <type>jar</type>
-        </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
-            <!-- Plugin Spring Boot con optimizaciones -->
+
+            <!-- Spring Boot Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -142,10 +136,7 @@
                         </exclude>
                     </excludes>
                     <jvmArguments>
-                        <!-- Optimizaciones JVM para inicio rápido -->
-                        -XX:TieredStopAtLevel=1
-                        -Xverify:none
-                        -Dspring.backgroundpreinitializer.ignore=true
+                        -XX:TieredStopAtLevel=1 -Xverify:none -Dspring.backgroundpreinitializer.ignore=true
                     </jvmArguments>
                     <optimizedLaunch>true</optimizedLaunch>
                 </configuration>
@@ -158,21 +149,24 @@
                     </execution>
                 </executions>
             </plugin>
-            
-            <!-- Compilador Java optimizado -->
+
+            <!-- Compilador Java -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                     <compilerArgs>
-                        <arg>-parameters</arg> <!-- Mejor soporte para parámetros en reflexión -->
+                        <arg>-parameters</arg>
                     </compilerArgs>
                     <fork>true</fork>
                     <optimize>true</optimize>
                 </configuration>
             </plugin>
+
         </plugins>
-        
+
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -192,9 +186,10 @@
             </resource>
         </resources>
     </build>
-    
+
     <profiles>
-        <!-- Perfil de desarrollo con más herramientas -->
+
+        <!-- Perfil de desarrollo -->
         <profile>
             <id>dev</id>
             <activation>
@@ -213,34 +208,29 @@
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
-                            <jvmArguments>
-                                -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
-                            </jvmArguments>
+                            <jvmArguments>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005</jvmArguments>
                         </configuration>
                     </plugin>
                 </plugins>
             </build>
         </profile>
-        
-        <!-- Perfil de producción optimizado -->
+
+        <!-- Perfil de producción -->
         <profile>
             <id>prod</id>
-            <properties>
-                <spring.aot.enabled>true</spring.aot.enabled>
-            </properties>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
-                            <jvmArguments>
-                                -XX:+TieredCompilation -XX:TieredStopAtLevel=1
-                            </jvmArguments>
+                            <jvmArguments>-XX:+TieredCompilation -XX:TieredStopAtLevel=1</jvmArguments>
                         </configuration>
                     </plugin>
                 </plugins>
             </build>
         </profile>
+
     </profiles>
+
 </project>

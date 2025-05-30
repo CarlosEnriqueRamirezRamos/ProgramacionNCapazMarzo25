@@ -130,8 +130,12 @@ public class UsuarioControler {
             usuarioDireccion.direccion.setIdDireccion(0);
 
             // Cargar lista de países
-            model.addAttribute("paises", paisDAOImplementation.PaisGetAll().object);
+            model.addAttribute("paisddl", paisDAOImplementation.PaisGetAll().object);
 
+            // ✅ Inicializar listas vacías para selects dependientes
+            model.addAttribute("estadoddl", new ArrayList<Estado>());
+            model.addAttribute("municipioddl", new ArrayList<Municipio>());
+            model.addAttribute("coloniaddl", new ArrayList<Colonia>());
         } else if (IdDireccion > 0) {
             // MODO EDITAR DIRECCIÓN EXISTENTE
             System.out.println("MODO EDITAR DIRECCIÓN");
