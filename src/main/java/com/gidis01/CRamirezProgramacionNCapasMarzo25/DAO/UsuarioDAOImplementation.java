@@ -10,6 +10,7 @@ import com.gidis01.CRamirezProgramacionNCapasMarzo25.ML.Pais;
 import com.gidis01.CRamirezProgramacionNCapasMarzo25.ML.Result;
 import com.gidis01.CRamirezProgramacionNCapasMarzo25.ML.Rol;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import java.sql.ResultSet;
@@ -390,9 +391,36 @@ public class UsuarioDAOImplementation implements IUsuarioDAO {
     }
 
     @Override
-    public Result DeleteJPA() {
+    public Result DeleteJPA(int idUsuario) {
         Result result = new Result();
+        try {
+            // Buscar usuario por ID
+            com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Usuario usuarioJPA
+                    = EntityManager.find(com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Usuario.class, idUsuario);
 
+            if (usuarioJPA != null) {
+                // Buscar direcciones asociadas (si las hay)
+                Query query = EntityManager.createQuery("SELECT d FROM Direccion d WHERE d.Usuario.idUsuario = :idUsuario");
+                query.setParameter("idUsuario", idUsuario);
+                List<com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Direccion> direcciones = query.getResultList();
+
+                // Eliminar direcciones
+                for (com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Direccion direccion : direcciones) {
+                    EntityManager.remove(direccion);
+                }
+
+                // Eliminar usuario
+                EntityManager.remove(usuarioJPA);
+                result.correct = true;
+            } else {
+                result.correct = false;
+                result.errorMessage = "Usuario no encontrado.";
+            }
+        } catch (Exception ex) {
+            result.correct = false;
+            result.errorMessage = ex.getMessage();
+            result.ex = ex;
+        }
         return result;
     }
 

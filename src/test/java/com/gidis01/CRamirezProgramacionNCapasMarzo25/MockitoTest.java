@@ -9,8 +9,10 @@ import com.gidis01.CRamirezProgramacionNCapasMarzo25.ML.Usuario;
 import com.gidis01.CRamirezProgramacionNCapasMarzo25.ML.UsuarioDireccion;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import static org.apache.commons.math3.stat.inference.TestUtils.t;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -94,19 +96,27 @@ public class MockitoTest {
 
     @Test
     public void GetAll() {
-        Result result = usuarioDAOImplementation.GetAll();
-        if (result.correct) {
-            System.out.println("Usuarios encontrados: " + result.objects.size());
-            for (Object obj : result.objects) {
-                UsuarioDireccion ud = (UsuarioDireccion) obj;
-                System.out.println("Usuario: " + ud.usuario.getNombre() + " " + ud.usuario.getApellidoPaterno());
-                for (Direccion dir : ud.direcciones) {
-                    System.out.println("  Dirección: " + dir.getCalle() + " #" + dir.getNumeroExterior());
-                }
-            }
-        } else {
-            System.out.println("Error al obtener usuarios:");
-            System.out.println(result.errorMessage);
-        }
+
+        TypedQuery<com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Usuario> queryUsuario = Mockito.mock(TypedQuery.class);
+        Mockito.when(entityManager.createQuery(
+                "FROM Usuario", com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Usuario.class))
+                .thenReturn(queryUsuario);
+        TypedQuery<com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Direccion> queryDirecciones = Mockito.mock(TypedQuery.class);
+        Mockito.when(entityManager.createQuery(
+        "FROM Direccion WHERE Usuario.IdUsuario = :idusuario", com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Direccion.class))
+                .thenReturn(queryDirecciones);
+        
+        List<com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Usuario> usuarios = new ArrayList<>();
+        Mockito.when(queryUsuarios.getResultList()).thenReturn(usuarios);
+        
+        List<com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Direccion> direcciones = new ArrayList<>();
+        Mockito.when(queryDirecciones.getResultList()).thenReturn(direcciones);
+        
+                
+        Result result = usuarioDAOImplementation.GetAllJPA();
+        
+        Assertions.assertTrue(result.correct);
+        
+        Mockito.verify(entityManager, Mockito.times(1)).createQuery("FROM Usuario", com.gidis01.CRamirezProgramacionNCapasMarzo25.JPA.Usuario.class);
     }
 }

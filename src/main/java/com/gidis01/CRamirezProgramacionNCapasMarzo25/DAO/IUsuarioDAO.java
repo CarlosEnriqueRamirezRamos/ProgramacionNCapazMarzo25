@@ -13,7 +13,7 @@ public interface IUsuarioDAO {
     Result UpdateStatus(Usuario usuario);
     Result GetAllJPA();
     Result AddJPA(UsuarioDireccion usuarioDireccion);
-    Result DeleteJPA();
+    Result DeleteJPA(int idUsuario);
     Result direccionesByIdUsuarioJPA(int IdUsuario);
 //    Result Update(int IdUsuario);
 }
