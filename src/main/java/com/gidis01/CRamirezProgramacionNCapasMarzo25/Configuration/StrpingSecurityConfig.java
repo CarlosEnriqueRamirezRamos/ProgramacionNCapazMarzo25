@@ -9,12 +9,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
 public class StrpingSecurityConfig {
-
+    
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails admin = User.builder()
@@ -22,22 +21,22 @@ public class StrpingSecurityConfig {
                 .password("{noop}12345")
                 .roles("Admin")
                 .build();
-
+        
         UserDetails programador = User.builder()
                 .username("Enrique")
                 .password("{noop}12345")
                 .roles("Programador")
                 .build();
-
+        
         UserDetails analista = User.builder()
                 .username("Luis")
                 .password("{noop}12345")
                 .roles("Analista")
                 .build();
-
+        
         return new InMemoryUserDetailsManager(admin, programador, analista);
     }
-
+    
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -49,12 +48,15 @@ public class StrpingSecurityConfig {
                 .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                .defaultSuccessUrl("/Usuario", true)
+                .loginPage("/login")
+                .failureUrl("/login-error")
+                .defaultSuccessUrl("/login-success", true)
                 .permitAll()
                 )
                 .logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout")
+                .logoutSuccessUrl("/logout-exitoso")
+                .clearAuthentication(true)
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .permitAll()
