@@ -13,7 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class StrpingSecurityConfig {
-    
+
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails admin = User.builder()
@@ -21,22 +21,22 @@ public class StrpingSecurityConfig {
                 .password("{noop}12345")
                 .roles("Admin")
                 .build();
-        
+
         UserDetails programador = User.builder()
                 .username("Enrique")
                 .password("{noop}12345")
                 .roles("Programador")
                 .build();
-        
+
         UserDetails analista = User.builder()
                 .username("Luis")
                 .password("{noop}12345")
                 .roles("Analista")
                 .build();
-        
+
         return new InMemoryUserDetailsManager(admin, programador, analista);
     }
-    
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -60,7 +60,11 @@ public class StrpingSecurityConfig {
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .permitAll()
+                )
+                .exceptionHandling(exception -> exception
+                .accessDeniedPage("/acceso-denegado") // <-- Aquí está bien usada
                 );
+
         return http.build();
     }
 }

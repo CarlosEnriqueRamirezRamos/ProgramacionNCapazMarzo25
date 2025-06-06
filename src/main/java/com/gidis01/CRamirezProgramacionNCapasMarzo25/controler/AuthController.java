@@ -36,4 +36,9 @@ public class AuthController {
         return "logout";
     }
 
+    @GetMapping("/acceso-denegado")
+public String accesoDenegado() {
+    return "acceso-denegado"; // Este debe ser el nombre de tu HTML
+}
+    
 }
